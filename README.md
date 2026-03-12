@@ -74,8 +74,7 @@ Deployment: Offline Immersive / GitHub Pages
 
 Clone the repository:
 
-git clone [https://github.com/your-username/edubridge-suite.git](https://github.com/your-username/edubridge-suite.git)
-
+git clone [https://github.com/IBI-Yamta/EduBridge_Offline_Suite.git](https://github.com/IBI-Yamta/EduBridge_Offline_Suite.git)
 
 Install dependencies:
 
