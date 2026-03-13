@@ -16,14 +16,8 @@ import {
  * ==============================================================================================
  * EDUBRIDGE OFFLINE SUITE - ULTIMATE MASTER EXCELLENCE EDITION
  * ==============================================================================================
- * Developed by: IB TECHIFIED
+ * Developed by: IBRAHIM ISAH YAMTA (IB TECHIFIED) 3MTT FELLOW. FE/23/86231210. 
  * Support Email: ib.techified.consults.africa@gmail.com
- * * * FEATURES RESTORED & INTEGRATED:
- * 1. STUDENT REGISTRY: Global database with auto-import and normalization (ss 1 = ss1).
- * 2. EDUNOTE WORKSPACE: Full original curriculum, Image Attachments, and PDF/DOC exports.
- * 3. EXPORT FIX: Images and text now correctly render in PDF and Word Doc.
- * 4. MODIFICATION TIMESTAMPS: Visible in both EduCalc and EduNote archives.
- * 5. STABLE NAVIGATION: Direct module switching to prevent loops.
  * ==============================================================================================
  */
 
@@ -92,11 +86,11 @@ const NIGERIAN_SCHEMES = {
     { subject: 'Chemistry', topics: 'Periodic Table trends. Chemical Bonding. REDOX reactions. Electrolysis. Carbon and its Compounds. Energetics, Entropy, and Chemical Equilibrium.' }
   ],
   'SS 3': [
-    { subject: 'Mathematics', topics: 'Calculus: Fundamental Differentiation and Integration. Matrices and Determinants. Vector Analysis. Longitude and Latitude. Number bases review. Financial math.' },
-    { subject: 'English', topics: 'WAEC/NECO Exam Prep. Formal Letters and Job Applications. Oral English: Rhythm and Stress. Summary Skills. Word register: Science, Technology, and Media.' },
-    { subject: 'Biology', topics: 'Genetics and Heredity: Mendelian laws. Evolution and Variation. Ecology: Population Dynamics. Nervous system review. Biology of survival.' },
-    { subject: 'Physics', topics: 'Atomic Physics: Radioactivity and X-rays. Electronics: Diodes and Logic Gates. Magnetic Fields. Electromagnetic Induction. AC circuits. Quantum mechanics basics.' },
-    { subject: 'Chemistry', topics: 'Organic Chemistry: Hydrocarbons, Alcohols, Organic Acids. Qualitative Analysis. Chemical Equilibrium. Nuclear chemistry. Industry: Plastics and Soaps.' }
+    { subject: 'Mathematics', topics: 'Calculus: Fundamental Differentiation and Integration basics. Matrices and Determinants: Operations and Cramer’s rule. Vector Analysis in 2D space. Longitude and Latitude: Calculating great circle distances on Earth. Number bases review and conversion. Practical Statistics: Advanced work with large data sets and probability distributions for final exams. Financial math: Annuities and Amortization.' },
+    { subject: 'English', topics: 'WAEC/NECO Examination Prep: Intensive analysis of past questions and marking schemes. Formal Letters and Job Applications: Professional correspondence. Oral English: Stress, Rhythm, and Intonation patterns for effective communication. Summary Skills: Extracting and rephrasing main points from dense texts. Word register of Science, Technology, and Media. Creative composition for final exams.' },
+    { subject: 'Biology', topics: 'Genetics and Heredity: Mendelian laws, monohybrid/dihybrid crosses, and sex-linked traits. Evolution and Variation: Theories of evolution. Ecology: Detailed Population Dynamics, Succession, and Environmental Conservation. Nervous system review: Sensory organs and complex reflex actions. Biology of survival in harsh environments.' },
+    { subject: 'Physics', topics: 'Atomic Physics: Radioactivity and X-rays. Electronics: Diodes and Logic Gates. Magnetic Fields: Force calculation on moving charges. Electromagnetic Induction: Transformers, Motors, and Generators. Alternating current (AC) circuits: Reactance and Impedance. Quantum mechanics basics.' },
+    { subject: 'Chemistry', topics: 'Organic Chemistry: Detailed study of Hydrocarbons, Alcohols, and Organic Acids. Qualitative Analysis: Identification of salts and gases in lab environments. Chemical Equilibrium: Applying Le Chatelier’s principle. Fats and Oils: Saponification. Nuclear chemistry: Fission, Fusion, and applications. Chemistry in industry: Plastics and Soaps.' }
   ]
 };
 
@@ -108,7 +102,9 @@ const SUBJECT_LISTS = {
 
 // --- HELPER LOGIC ---
 const normS = (s) => s ? s.trim().toLowerCase().replace(/\s+/g, '') : "";
+
 const detectCategory = (className) => {
+  if (!className) return "Senior";
   const n = normS(className);
   if (n.startsWith('pri') || n.startsWith('grade')) return 'Primary';
   if (n.startsWith('jss')) return 'Junior';
@@ -137,8 +133,6 @@ export default function App() {
   const [subject, setSubject] = useState("");
   const [className, setClassName] = useState("");
   const [registers, setRegisters] = useState([]);
-
-  // --- EDUNOTE STATE ---
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [selectedLevel, setSelectedLevel] = useState(null); 
@@ -163,11 +157,9 @@ export default function App() {
     if (data.students !== undefined) setStudents(data.students);
     if (data.subject !== undefined) setSubject(data.subject);
     if (data.className !== undefined) setClassName(data.className);
+    
+    // Ensure back button support
     window.history.pushState({ module, ...data }, "");
-  };
-
-  const goBackTo = (module) => {
-    setCurrentModule(module);
   };
 
   useEffect(() => {
@@ -194,7 +186,7 @@ export default function App() {
     try {
       const r = localStorage.getItem('eb_regs_vfinal');
       const n = localStorage.getItem('eb_notes_vfinal');
-      const p = localStorage.getItem('eb_profile_vfinal');
+      const p = localStorage.getItem('eb_user_profile');
       const d = localStorage.getItem('eb_db_vfinal');
       if (r) setRegisters(JSON.parse(r));
       if (n) setNoteArchives(JSON.parse(n));
@@ -207,7 +199,7 @@ export default function App() {
     localStorage.setItem('eb_regs_vfinal', JSON.stringify(registers));
     localStorage.setItem('eb_notes_vfinal', JSON.stringify(noteArchives));
     localStorage.setItem('eb_db_vfinal', JSON.stringify(globalStudents));
-    if (userProfile) localStorage.setItem('eb_profile_vfinal', JSON.stringify(userProfile));
+    if (userProfile) localStorage.setItem('eb_user_profile', JSON.stringify(userProfile));
   }, [registers, noteArchives, userProfile, globalStudents]);
 
   const triggerToast = (msg) => {
@@ -215,7 +207,7 @@ export default function App() {
     setTimeout(() => setShowToast(false), 3000);
   };
 
-  // --- ACTIONS ---
+  // --- LOGIC ---
   const handleSetup = () => {
     if (!setupName || !setupPass) return triggerToast("Fill all fields");
     setUserProfile({ name: setupName, password: setupPass, created: new Date().toLocaleDateString() });
@@ -223,7 +215,7 @@ export default function App() {
   };
 
   const handleLogin = () => {
-    if (loginPass === userProfile.password) { setIsLocked(false); triggerToast(`Welcome back, ${userProfile.name}`); }
+    if (loginPass === userProfile.password) { setIsLocked(false); triggerToast(`Welcome Back, ${userProfile.name}`); }
     else triggerToast("Incorrect Password");
   };
 
@@ -237,8 +229,9 @@ export default function App() {
       const matching = globalStudents
         .filter(gs => normS(gs.className) === normS(className))
         .map(gs => ({ id: gs.id, name: gs.name, ca1:0, ca2:0, exam:0, total:0, grade:"F" }));
-      if(matching.length > 0) triggerToast(`Imported ${matching.length} Students from Registry`);
-      setStudents(matching); setCalcId(null);
+      if(matching.length > 0) triggerToast(`Imported ${matching.length} Students`);
+      setStudents(matching);
+      setCalcId(null);
       setCurrentModule('educalc_register');
     }
   };
@@ -248,12 +241,8 @@ export default function App() {
     const ts = new Date().toLocaleString([], { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
     const id = calcId || Date.now();
     setRegisters([{ id, subject, className, students, lastSaved: ts }, ...registers.filter(r => r.id !== id)]);
-    setCalcId(id); triggerToast("Record Saved!");
-  };
-
-  const loadRegister = (record) => {
-    setCalcId(record.id); setStudents(record.students || []); setSubject(record.subject); setClassName(record.className);
-    setCurrentModule('educalc_register');
+    setCalcId(id);
+    triggerToast("Record Saved!");
   };
 
   const updateStudent = (id, field, value) => {
@@ -271,25 +260,31 @@ export default function App() {
   };
 
   const saveLessonNote = () => {
-    if (!noteTopic || !currentNote) return triggerToast("Note is empty");
+    if (!noteTopic || !currentNote) return triggerToast("Note details missing");
     const key = `${selectedSubject}_${selectedLevel}`;
     const ts = new Date().toLocaleString([], { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
     const newNote = { week: selectedWeek, topic: noteTopic, content: currentNote, image: noteImage, date: ts };
     const updated = (noteArchives[key] || []).filter(n => n.week !== selectedWeek);
     setNoteArchives({ ...noteArchives, [key]: [newNote, ...updated] });
-    triggerToast(`Week ${selectedWeek} Vaulted!`);
+    triggerToast(`Week ${selectedWeek} Saved!`);
   };
 
   const exportDoc = () => {
     if (!noteTopic || !currentNote) return triggerToast("No content");
     let imageHtml = noteImage ? `<div style="text-align:center; margin-bottom:20px;"><img src="${noteImage}" style="max-width:550px; border:1px solid #ddd; border-radius:10px;"/></div>` : "";
-    const html = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><style>body{font-family:sans-serif;padding:40px;line-height:1.6;}h1{color:#2563EB;text-align:center;} .meta{background:#f8fafc;padding:15px;border-radius:10px;margin-bottom:20px; border:1px solid #ddd;}</style></head><body><h1>EDUBRIDGE LESSON NOTE</h1><div class="meta"><b>PREPARED BY:</b> ${userProfile.name}<br/><b>SUBJECT:</b> ${selectedSubject}<br/><b>CLASS:</b> ${selectedLevel}<br/><b>WEEK:</b> ${selectedWeek}<br/><b>TOPIC:</b> ${noteTopic.toUpperCase()}<br/><b>DATE:</b> ${new Date().toLocaleDateString()}</div>${imageHtml}<div style="white-space:pre-wrap">${currentNote}</div><p style="margin-top:50px;font-size:10px;color:#888;">IB TECHIFIED Offline Suite • Kano 2026</p></body></html>`;
+    const html = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><style>body{font-family:sans-serif;padding:40px;line-height:1.6;}h1{color:#2563EB;text-align:center;} .meta{background:#f8fafc;padding:15px;border-radius:10px;margin-bottom:20px; border:1px solid #ddd;}</style></head><body><h1>EDUBRIDGE LESSON NOTE</h1><div class="meta"><b>PREPARED BY:</b> ${userProfile.name}<br/><b>SUBJECT:</b> ${selectedSubject}<br/><b>CLASS:</b> ${selectedLevel}<br/><b>WEEK:</b> ${selectedWeek}<br/><b>TOPIC:</b> ${noteTopic.toUpperCase()}</div>${imageHtml}<div style="white-space:pre-wrap">${currentNote}</div><p style="margin-top:50px;font-size:10px;color:#888;">IB TECHIFIED Offline Suite • Kano 2026</p></body></html>`;
     const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['\ufeff', html], { type: 'application/msword' }));
     a.download = `${noteTopic.replace(/\s+/g, '_')}_LessonNote.doc`; a.click();
     triggerToast("MS Word Export Ready");
   };
 
-  // --- RENDER LOGIC ---
+  const addToDatabase = (name, targetClass) => {
+    if(!name || !targetClass) return triggerToast("Fill fields");
+    setGlobalStudents([{ id: Date.now(), name: name.toUpperCase(), className: targetClass.toUpperCase() }, ...globalStudents]);
+    triggerToast("Added to Registry");
+  };
+
+  // --- RENDER ---
   const renderView = () => {
     if (!userProfile) return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950 p-6 text-center animate-in zoom-in-95">
@@ -317,36 +312,35 @@ export default function App() {
     );
 
     if (isPrinting) return (
-      <div className="bg-white text-slate-900 p-12 min-h-screen font-sans">
-        <div className="border-b-4 border-blue-600 pb-6 mb-10 text-center uppercase font-black">
-          <h1 className="text-4xl text-blue-600 mb-2">EduBridge Digital Note</h1>
-          <div className="flex justify-center gap-4 text-[10px] text-slate-500 tracking-widest">
-             <span>Teacher: {userProfile.name}</span>
-             <span>•</span>
-             <span>{selectedSubject}</span>
-             <span>•</span>
-             <span>Week {selectedWeek}</span>
-          </div>
+      <div className="bg-white text-black p-10 min-h-screen font-sans border border-black m-4">
+        <div className="text-center border-b-2 border-black pb-4 mb-8">
+          <h1 className="text-4xl font-bold tracking-[0.2em] uppercase">EDUBRIDGE</h1>
         </div>
         
-        <div className="mb-8">
-           <h2 className="text-2xl font-black uppercase text-slate-800 mb-1">Topic: {noteTopic}</h2>
-           <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest">Date: {new Date().toLocaleDateString()}</p>
+        <div className="grid grid-cols-2 gap-y-3 mb-10 text-[11px] font-bold uppercase pb-4 border-b border-slate-100">
+           <div className="text-slate-600">TEACHER: <span className="text-black">{userProfile.name}</span></div>
+           <div className="text-right text-slate-600">DATE: <span className="text-black">{new Date().toLocaleDateString()}</span></div>
+           <div className="text-slate-600">CLASS: <span className="text-black">{selectedLevel}</span></div>
+           <div className="text-right text-slate-600">WEEK: <span className="text-black">{selectedWeek}</span></div>
+           <div className="col-span-2 text-slate-600 mt-1">SUBJECT: <span className="text-black">{selectedSubject}</span></div>
+        </div>
+
+        <div className="mb-10">
+           <h2 className="text-2xl font-black uppercase underline decoration-black underline-offset-8">TOPIC: {noteTopic}</h2>
         </div>
 
         {noteImage && (
-          <div className="mb-10 rounded-3xl overflow-hidden border-4 border-slate-50 shadow-sm text-center">
-            <img src={noteImage} className="w-full h-auto object-contain mx-auto" alt="Board Attachment" />
+          <div className="mb-10 text-center rounded-2xl overflow-hidden shadow-sm border border-slate-100">
+            <img src={noteImage} className="max-w-full h-auto object-contain mx-auto" alt="Board Attachment" />
           </div>
         )}
 
-        <div className="text-xl leading-relaxed whitespace-pre-wrap text-slate-800 font-medium">
+        <div className="text-xl leading-[1.6] whitespace-pre-wrap text-black font-normal normal-case">
           {currentNote}
         </div>
 
-        <div className="mt-20 border-t-2 border-slate-100 pt-6 flex justify-between items-center opacity-50">
-           <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest italic">Digitally Prepared via IB TECHIFIED Offline Suite</p>
-           <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Kano Nigeria • 2026</p>
+        <div className="mt-20 pt-8 border-t border-slate-200 text-[10px] text-slate-400 font-bold uppercase tracking-widest text-center">
+           IB TECHIFIED Offline Suite • Prepared for the 21st-Century Nigerian Classroom
         </div>
       </div>
     );
@@ -361,7 +355,7 @@ export default function App() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-left">
             <button onClick={() => setCurrentModule('educalc_setup')} className="bg-white dark:bg-slate-900 p-8 rounded-[3.5rem] shadow-xl border-2 border-transparent hover:border-blue-500 transition-all group active:scale-[0.98]">
-              <Calculator size={32} className="text-blue-600 mb-6 group-hover:scale-110 transition-transform" /><h2 className="text-2xl font-black dark:text-slate-100 uppercase leading-none">EduCalc</h2><p className="text-slate-500 text-[10px] mt-3 font-bold uppercase tracking-widest leading-none">Grading & Results</p>
+              <Calculator size={32} className="text-blue-600 mb-6 group-hover:scale-110 transition-transform" /><h2 className="text-2xl font-black dark:text-slate-100 uppercase leading-none">EduCalc</h2><p className="text-slate-500 text-[10px] mt-3 font-bold uppercase tracking-widest leading-none">Results & Grading</p>
             </button>
             <button onClick={() => setCurrentModule('edunote_home')} className="bg-white dark:bg-slate-900 p-8 rounded-[3.5rem] shadow-xl border-2 border-transparent hover:border-emerald-500 transition-all group active:scale-[0.98]">
               <FileText size={32} className="text-emerald-600 mb-6 group-hover:scale-110 transition-transform" /><h2 className="text-2xl font-black dark:text-slate-100 uppercase leading-none">EduNote</h2><p className="text-slate-500 text-[10px] mt-3 font-bold uppercase tracking-widest leading-none">Lesson Vault</p>
@@ -382,7 +376,7 @@ export default function App() {
       );
 
       case 'student_db': return (
-        <div className="max-w-4xl mx-auto pt-10 px-4 space-y-10 animate-in slide-in-from-right-10 pb-20 text-center uppercase tracking-widest font-black leading-none">
+        <div className="max-w-4xl mx-auto pt-10 px-4 space-y-10 animate-in slide-in-from-right-10 pb-20 text-center uppercase tracking-widest">
           <div className="flex items-center justify-between"><button onClick={() => setCurrentModule('hub')} className="flex items-center gap-2 text-slate-500 bg-white dark:bg-slate-900 px-5 py-2.5 rounded-2xl border shadow-sm active:scale-95 text-xs font-bold transition-all leading-none"><ChevronLeft size={18} /> Hub</button><h2 className="text-xl dark:text-slate-100 uppercase tracking-tight leading-none">Student Registry</h2></div>
           <div className="bg-white dark:bg-slate-900 p-8 rounded-[3.5rem] shadow-xl border dark:border-slate-800 space-y-6 text-left font-black">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 leading-none">
@@ -402,21 +396,22 @@ export default function App() {
       );
 
       case 'support_hub':
+        const chs = [
+          { t: 'Voice Call', d: '+234 703 038 554', i: <Phone className="text-blue-600"/>, l: 'tel:+234703038554' },
+          { t: 'WhatsApp Chat', d: '+234 703 038 554', i: <MessageCircle className="text-green-500"/>, l: 'https://wa.me/234703038554' },
+          { t: 'Official Email', d: 'ib.techified.consults.africa@gmail.com', i: <Mail className="text-orange-500"/>, l: 'mailto:ib.techified.consults.africa@gmail.com' },
+          { t: 'SMS Support', d: '+234 703 038 554', i: <MessageSquare className="text-purple-600"/>, l: 'sms:+234703038554' }
+        ];
         return (
           <div className="max-w-4xl mx-auto pt-10 px-4 space-y-10 animate-in fade-in pb-20 text-center uppercase tracking-widest font-black leading-none">
             <button onClick={() => setCurrentModule('hub')} className="flex items-center gap-2 text-slate-500 bg-white dark:bg-slate-900 px-5 py-2.5 rounded-2xl border shadow-sm active:scale-95 text-xs font-bold transition-all leading-none"><ChevronLeft size={18} /> Hub</button>
             <div className="bg-indigo-600 p-10 rounded-[3.5rem] text-white shadow-xl flex items-center gap-8 text-left relative overflow-hidden">
                 <LifeBuoy size={120} className="absolute -right-5 -bottom-5 opacity-10" />
                 <div className="p-5 bg-white rounded-[2rem] text-indigo-600 shadow-inner"><MessageCircle size={40} /></div>
-                <div><h3 className="text-3xl font-black uppercase leading-tight leading-none">Support Hub</h3><p className="text-indigo-100 uppercase font-bold tracking-widest text-xs mt-2 opacity-80 uppercase leading-none tracking-widest">Direct connection to IB TECHIFIED assistance</p></div>
+                <div><h3 className="text-3xl font-black uppercase leading-tight leading-none">Support Hub</h3><p className="text-indigo-100 uppercase font-bold tracking-widest text-xs mt-2 opacity-80 uppercase leading-none tracking-widest">IB TECHIFIED assistance</p></div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-               {[
-                 { t: 'Voice Call', d: '+234 703 038 554', i: <Phone className="text-blue-600"/>, l: 'tel:+234703038554' },
-                 { t: 'WhatsApp Chat', d: '+234 703 038 554', i: <MessageCircle className="text-green-500"/>, l: 'https://wa.me/234703038554' },
-                 { t: 'Official Email', d: 'ib.techified.consults.africa@gmail.com', i: <Mail className="text-orange-500"/>, l: 'mailto:ib.techified.consults.africa@gmail.com' },
-                 { t: 'SMS Support', d: '+234 703 038 554', i: <MessageSquare className="text-purple-600"/>, l: 'sms:+234703038554' }
-               ].map(ch => (
+               {chs.map(ch => (
                  <a key={ch.t} href={ch.l} target="_blank" className="bg-white dark:bg-slate-900 p-8 rounded-[3rem] border shadow-sm space-y-6 text-center hover:border-indigo-400 transition-all block group active:scale-95">
                     <div className="p-4 bg-slate-50 dark:bg-slate-800 rounded-full w-16 h-16 mx-auto flex items-center justify-center group-hover:scale-110 transition-transform font-black leading-none">{ch.i}</div>
                     <div><h3 className="text-xl font-black dark:text-slate-100 uppercase leading-none">{ch.t}</h3><p className="text-[10px] font-bold text-slate-400 mt-2 break-all uppercase leading-none tracking-widest">{ch.d}</p></div>
@@ -434,18 +429,18 @@ export default function App() {
             <h2 className="text-xl font-black uppercase text-center dark:text-slate-100 tracking-tight leading-none">Tech-How Hub</h2>
             <div className="grid grid-cols-1 gap-6 leading-none">
               {[
-                { t: "Hardware: Computer Basics", i: <Monitor className="text-blue-600"/>, s: ["Shutdown: Start > Power menu.", "Battery: Maintain between 20% and 80%.", "Cleaning: Soft dry cloth only."], p: "Ensure device is on a flat surface to prevent cooling issues." },
+                { t: "Hardware: Computer Basics", i: <Monitor className="text-blue-600"/>, s: ["Shutdown: Start > Power menu.", "Battery: 20% to 80% range.", "Cleaning: Soft dry cloth only."], p: "Ensure device is on a flat surface to prevent cooling issues." },
                 { t: "Hardware: Projector Setup", i: <Presentation className="text-red-500"/>, s: ["Connect HDMI before powering up.", "Press Windows + P on keyboard.", "Select 'Duplicate' to share."], p: "No Signal? Cycle inputs using 'Source' button on remote." },
                 { t: "OS: Vital Shortcuts", i: <Keyboard className="text-emerald-600"/>, s: ["Copy: Ctrl+C | Paste: Ctrl+V.", "Undo: Ctrl+Z | Save: Ctrl+S.", "Shortcuts save 1hr weekly."], p: "Saving frequently prevents data loss during unexpected reset." },
                 { t: "AI: Lesson Architect", i: <Wand2 className="text-purple-600"/>, s: ["Open AI tool (Gemini/ChatGPT).", "Copy the specialized prompt.", "Edit [CLASS] and [TOPIC]."], p: "Act as expert Nigerian Teacher. Generate detailed 40min lesson plan for [CLASS] on [TOPIC]. Include evaluation quiz." }
               ].map(g => (
                 <div key={g.t} className="bg-white dark:bg-slate-900 p-8 rounded-[3.5rem] border shadow-sm space-y-4 group transition-all hover:border-purple-400 leading-none">
                   <div className="flex items-center gap-4 border-b dark:border-slate-800 pb-4 leading-none"><div className="p-3 bg-slate-50 dark:bg-slate-800 rounded-2xl leading-none">{g.i}</div><h3 className="text-xl font-black text-slate-800 dark:text-slate-100 uppercase tracking-tight leading-none">{g.t}</h3></div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2 leading-none">
-                    <div className="space-y-2 text-slate-600 dark:text-slate-400 font-black leading-none">{g.s.map((s, idx) => <p key={idx} className="text-[10px] font-bold leading-none">• {s}</p>)}</div>
-                    <div className="bg-slate-50 dark:bg-slate-800 p-4 rounded-2xl border dark:border-slate-700 shadow-inner leading-none">
-                       <pre className="text-[9px] text-slate-600 dark:text-slate-300 font-mono italic whitespace-pre-wrap mb-3 leading-relaxed leading-none">{g.p}</pre>
-                       <button onClick={() => { const el = document.createElement('textarea'); el.value = g.p; document.body.appendChild(el); el.select(); document.execCommand('copy'); document.body.removeChild(el); triggerToast("Copied Prompt!"); }} className="w-full bg-slate-900 dark:bg-slate-100 dark:text-slate-900 text-white p-3 rounded-xl text-[9px] font-black uppercase shadow-lg active:scale-95 transition-all leading-none">Copy Prompt</button>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+                    <div className="space-y-2 text-slate-600 dark:text-slate-400 font-black">{g.s.map((s, idx) => <p key={idx} className="text-[10px] font-bold">• {s}</p>)}</div>
+                    <div className="bg-slate-50 dark:bg-slate-800 p-4 rounded-2xl border dark:border-slate-700 shadow-inner">
+                       <pre className="text-[9px] text-slate-600 dark:text-slate-300 font-mono italic whitespace-pre-wrap mb-3 leading-relaxed">{g.p}</pre>
+                       <button onClick={() => { const el = document.createElement('textarea'); el.value = g.p; document.body.appendChild(el); el.select(); document.execCommand('copy'); document.body.removeChild(el); triggerToast("Copied Content!"); }} className="w-full bg-slate-900 dark:bg-slate-100 dark:text-slate-900 text-white p-3 rounded-xl text-[9px] font-black uppercase shadow-lg active:scale-95 transition-all leading-none">Copy Prompt</button>
                     </div>
                   </div>
                 </div>
@@ -456,12 +451,12 @@ export default function App() {
 
       case 'how_to_use':
         return (
-          <div className="max-w-4xl mx-auto pt-10 px-4 space-y-10 animate-in fade-in pb-20 text-center uppercase tracking-widest font-black leading-none">
+          <div className="max-w-4xl mx-auto pt-10 px-4 space-y-10 animate-in fade-in pb-20 text-center uppercase tracking-widest leading-none font-black">
             <button onClick={() => setCurrentModule('hub')} className="flex items-center gap-2 text-slate-500 bg-white dark:bg-slate-900 px-6 py-3 rounded-2xl border shadow-sm active:scale-95 text-xs font-bold leading-none uppercase transition-all"><ChevronLeft size={18} /> Hub</button>
             <div className="grid grid-cols-1 gap-6 text-left leading-none font-black">
               <div className="bg-blue-600 p-10 rounded-[3.5rem] text-white shadow-xl flex items-center gap-8"><Lightbulb size={60} /><div><h3 className="text-3xl font-black uppercase leading-tight leading-none">User Manual</h3><p className="text-blue-100 uppercase font-bold tracking-widest text-xs mt-3 opacity-80 leading-relaxed leading-none">Master your digital toolkit with IB TECHIFIED.</p></div></div>
-              {[{t: "EduCalc Automation", d: "Set Subject and Class. Students from your Registry auto-populate based on normalized names ('ss1' = 'ss 1'). Results sum automatically using standard grading logic. Archives track mod time."}, {t: "EduNote Workspace", d: "Prepare notes with full Curriculum support. Attach board photos using the Camera icon. Export as professional PDF or Word Doc. Entries display exact modification timestamps."}, {t: "Registry & Backup", d: "Save names to Registry once. Normalization logic ensures consistency across all classes. Use Backup Center weekly to download master JSON file for data portability across devices."}].map(g => (
-                <div key={g.t} className="bg-white dark:bg-slate-900 p-8 rounded-[3rem] border border-slate-100 dark:border-slate-800 shadow-sm space-y-4 transition-all hover:border-blue-400 leading-none"><h3 className="text-xl font-black text-slate-800 dark:text-slate-100 border-b dark:border-slate-800 pb-4 uppercase leading-none leading-none">{g.t}</h3><p className="text-sm font-bold text-slate-600 dark:text-slate-400 leading-relaxed leading-none">• {g.d}</p></div>
+              {[{t: "EduCalc Automation", d: "Set Subject and Class. Students from your Registry auto-populate based on normalized names ('ss1' = 'ss 1'). Results sum automatically using standard grading logic. Archives track mod time."}, {t: "EduNote Workspace", d: "Prepare notes with full Curriculum support. Attach board photos using the Camera icon. Export as professional PDF or Word Doc. Entries display exact modification timestamps."}, {t: "Registry & Backup", d: "Add names to Registry once. Normalization logic ensures consistency across all classes. Use Backup Center weekly to download master JSON file for data portability across devices."}].map(g => (
+                <div key={g.t} className="bg-white dark:bg-slate-900 p-8 rounded-[3rem] border border-slate-100 dark:border-slate-800 shadow-sm space-y-4 transition-all hover:border-blue-400 leading-none"><h3 className="text-xl font-black text-slate-800 dark:text-slate-100 border-b dark:border-slate-800 pb-4 uppercase leading-none leading-none">{g.t}</h3><p className="text-sm font-bold text-slate-600 dark:text-slate-400 leading-relaxed">• {g.d}</p></div>
               ))}
             </div>
           </div>
@@ -474,17 +469,17 @@ export default function App() {
              <div className="lg:col-span-2 bg-white dark:bg-slate-900 p-8 rounded-[3.5rem] shadow-xl border dark:border-slate-800 space-y-6">
                 <h3 className="text-sm dark:text-slate-100 uppercase tracking-widest leading-none"><FilePlus2 size={18} className="text-blue-600 inline mr-2" /> Class Entry</h3>
                 <div className="space-y-4 pt-4">
-                  <div className="space-y-1"><label className="text-[9px] text-slate-400 font-bold ml-4 uppercase leading-none">Subject</label><input type="text" placeholder="Mathematics" className="w-full p-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl outline-none font-bold dark:text-slate-100 shadow-inner" value={subject} onChange={(e) => setSubject(e.target.value)} /></div>
+                  <div className="space-y-1"><label className="text-[9px] text-slate-400 font-bold ml-4 uppercase tracking-widest leading-none">Subject</label><input type="text" placeholder="Mathematics" className="w-full p-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl outline-none font-bold dark:text-slate-100 shadow-inner" value={subject} onChange={(e) => setSubject(e.target.value)} /></div>
                   <div className="space-y-1">
-                    <label className="text-[9px] text-slate-400 font-bold ml-4 uppercase leading-none">Class</label>
+                    <label className="text-[9px] text-slate-400 font-bold ml-4 uppercase tracking-widest leading-none">Class</label>
                     <input type="text" placeholder="e.g. SS 1" className="w-full p-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl outline-none font-bold dark:text-slate-100 shadow-inner" value={className} onChange={(e) => setClassName(e.target.value)} />
-                    {className.length > 0 && <div className="mt-2 text-[9px] font-black text-blue-600 px-4 flex items-center gap-1 leading-none"><Zap size={10} /> {detectCat(className).toUpperCase()} SCHEME DETECTED</div>}
+                    {className.length > 0 && <div className="mt-2 text-[9px] font-black text-blue-600 px-4 flex items-center gap-1 leading-none"><Zap size={10} /> {detectCategory(className).toUpperCase()} SCHEME DETECTED</div>}
                   </div>
                   <button onClick={handleStartEduCalc} className="w-full bg-blue-600 text-white p-5 rounded-2xl font-black shadow-xl uppercase tracking-widest text-[10px] active:scale-95 transition-all leading-none">Open Register</button>
                 </div>
              </div>
              <div className="lg:col-span-3 space-y-6">
-                <h3 className="text-sm dark:text-slate-100 uppercase tracking-widest px-4 leading-none"><History size={18} className="text-blue-600 inline mr-2" /> Archives</h3>
+                <h3 className="text-sm dark:text-slate-100 uppercase tracking-widest px-4 leading-none"><History size={18} className="text-blue-600 inline mr-2" /> Local Archives</h3>
                 <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
                     {registers.length === 0 ? <div className="text-center py-20 bg-white dark:bg-slate-900 rounded-[3rem] border border-dashed text-slate-300 font-black text-[9px] uppercase tracking-widest leading-none shadow-inner">No local records</div> :
                     registers.map(r => (
@@ -528,10 +523,109 @@ export default function App() {
         </div>
       );
 
+      case 'edunote_home': return (
+        <div className="max-w-4xl mx-auto pt-10 px-4 space-y-10 animate-in fade-in pb-20 text-center uppercase tracking-widest font-black leading-none">
+          <div className="flex items-center justify-between"><button onClick={() => setCurrentModule('hub')} className="flex items-center gap-2 text-slate-500 bg-white dark:bg-slate-900 px-5 py-2.5 rounded-2xl border shadow-sm active:scale-95 text-xs font-bold leading-none"><ChevronLeft size={18} /> Hub</button><h2 className="text-xl dark:text-slate-100 uppercase tracking-tight leading-none">Category</h2></div>
+          <div className="grid grid-cols-1 gap-6 text-left font-black">
+            {['Primary', 'Junior', 'Senior'].map(cat => (
+              <button key={cat} onClick={() => changeView('edunote_subjects', { category: cat })} className="bg-white dark:bg-slate-900 p-8 rounded-[3rem] border-2 border-transparent hover:border-emerald-500 shadow-sm flex items-center justify-between group transition-all active:scale-[0.98]">
+                <div className="flex items-center gap-6 font-black"><div className="p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl group-hover:bg-emerald-600 group-hover:text-white transition-colors shadow-sm"><GraduationCap size={24}/></div><h3 className="text-2xl text-slate-800 dark:text-slate-100">{cat} School</h3></div>
+                <ChevronRight className="text-slate-300 group-hover:translate-x-1 transition-transform" />
+              </button>
+            ))}
+          </div>
+        </div>
+      );
+
+      case 'edunote_subjects': return (
+        <div className="max-w-4xl mx-auto pt-10 px-4 space-y-10 animate-in slide-in-from-right-10 pb-20 text-center uppercase tracking-widest font-black">
+           <div className="flex items-center justify-between"><button onClick={() => setCurrentModule('edunote_home')} className="flex items-center gap-2 text-slate-500 bg-white dark:bg-slate-900 px-5 py-2.5 rounded-2xl border shadow-sm active:scale-95 text-xs font-bold leading-none"><ChevronLeft size={18} /> Back</button><div className="bg-blue-600 text-white px-6 py-2.5 rounded-full font-black text-[9px] shadow-md uppercase leading-none">{selectedCategory} SCHOOL</div></div>
+           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-8">
+             {SUBJECT_LISTS[selectedCategory]?.map(s => (
+               <button key={s} onClick={() => changeView('edunote_levels', { subj: s })} className="bg-white dark:bg-slate-900 p-6 rounded-[2rem] border-2 border-transparent hover:border-blue-600 transition-all font-black text-slate-700 dark:text-slate-200 text-xs shadow-sm active:scale-95 uppercase tracking-widest leading-none">{s}</button>
+             ))}
+           </div>
+        </div>
+      );
+
+      case 'edunote_levels': return (
+        <div className="max-w-4xl mx-auto pt-10 px-4 space-y-10 animate-in slide-in-from-right-10 pb-20 text-center uppercase tracking-widest font-black">
+          <div className="flex items-center justify-between"><button onClick={() => setCurrentModule('edunote_subjects')} className="flex items-center gap-2 text-slate-500 bg-white dark:bg-slate-900 px-5 py-2.5 rounded-2xl border active:scale-95 shadow-sm text-xs font-bold leading-none"><ChevronLeft size={18} /> Back</button><div className="bg-emerald-600 text-white px-6 py-2.5 rounded-full font-black text-[9px] shadow-md uppercase leading-none">{selectedSubject}</div></div>
+          <div className="flex flex-wrap justify-center gap-6 mt-12 font-black">
+            {(selectedCategory === 'Primary' ? ['Pri 1', 'Pri 2', 'Pri 3', 'Pri 4', 'Pri 5'] : selectedCategory === 'Junior' ? ['JSS 1', 'JSS 2', 'JSS 3'] : ['SS 1', 'SS 2', 'SS 3']).map(lvl => (
+              <button key={lvl} onClick={() => changeView('edunote_view', { level: lvl })} className="bg-white dark:bg-slate-900 w-32 h-32 rounded-[2.5rem] border-2 border-transparent hover:border-emerald-500 transition-all flex flex-col items-center justify-center font-black text-xl text-slate-800 dark:text-slate-100 shadow-md active:scale-95 transition-all leading-none"><span className="text-[9px] text-slate-400 mb-1 uppercase tracking-widest leading-none">Class</span>{lvl}</button>
+            ))}
+          </div>
+        </div>
+      );
+
+      case 'edunote_view': 
+        const scheme_L = (NIGERIAN_SCHEMES[selectedLevel] || []).filter(s => s.subject.toLowerCase() === selectedSubject?.toLowerCase());
+        const note_V = noteArchives[`${selectedSubject}_${selectedLevel}`] || [];
+        return (
+        <div className="max-w-7xl mx-auto pt-10 px-4 space-y-8 animate-in slide-in-from-right-10 pb-20 text-center uppercase tracking-widest font-black">
+          <div className="sticky top-4 z-50 flex items-center justify-between bg-white/90 dark:bg-slate-900/90 backdrop-blur-md p-4 rounded-[2rem] border shadow-xl">
+             <button onClick={() => setCurrentModule('edunote_levels')} className="flex items-center gap-2 text-slate-500 bg-slate-50 dark:bg-slate-800 px-5 py-2.5 rounded-2xl active:scale-95 text-xs font-bold transition-all leading-none"><ChevronLeft size={18} /> Back</button>
+             <div className="flex gap-2">
+                <button onClick={() => { setIsPrinting(true); setTimeout(() => { window.print(); setIsPrinting(false); }, 1200); }} className="bg-blue-600 text-white px-5 py-2.5 rounded-2xl text-[9px] font-black uppercase shadow-lg active:scale-95 transition-all leading-none"><Printer size={16} className="inline mr-2"/> PDF</button>
+                <button onClick={exportDoc} className="bg-indigo-600 text-white px-5 py-2.5 rounded-2xl text-[9px] font-black uppercase shadow-lg active:scale-95 transition-all leading-none"><FileCode size={16} className="inline mr-2"/> Word Doc</button>
+                <button onClick={saveLessonNote} className="bg-emerald-600 text-white px-5 py-2.5 rounded-2xl text-[9px] font-black uppercase shadow-lg active:scale-95 transition-all leading-none"><Save size={16} className="inline mr-2"/> Save</button>
+             </div>
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 mt-4 text-left font-black">
+             <div className="space-y-6">
+                <div className="bg-blue-600 text-white p-8 rounded-[3.5rem] shadow-xl space-y-6 relative overflow-hidden">
+                   <h3 className="text-xs uppercase tracking-widest z-10 relative leading-none">Curriculum Library</h3>
+                   <div className="space-y-4 max-h-[550px] overflow-y-auto pr-2 custom-scrollbar z-10 relative">
+                      {scheme_L.map((item, i) => (
+                        <div key={i} className="bg-white/10 p-5 rounded-[2.5rem] border border-white/20 hover:bg-white/20 transition-all cursor-pointer">
+                          <p className="text-[10px] font-bold leading-relaxed italic text-white/90">"{item.topics}"</p>
+                          <button onClick={() => { setNoteTopic(item.topics); setNoteImage(null); setCurrentNote(`Subject: ${selectedSubject}\nWeek: ${selectedWeek}\nTopic: ${item.topics}\n\nObjectives:\n1.\n\nContent Presentation:\n-`); }} className="mt-4 text-[9px] font-black uppercase bg-white text-blue-600 px-4 py-2.5 rounded-xl w-full shadow-md active:scale-95 transition-all leading-none">Load Draft</button>
+                        </div>
+                      ))}
+                      {!scheme_L.length && <p className="text-[10px] text-white/50 text-center uppercase py-4 leading-relaxed font-bold leading-none">No data</p>}
+                   </div>
+                   <GraduationCap className="absolute -right-5 -bottom-5 opacity-10 text-white" size={150} />
+                </div>
+             </div>
+             <div className="lg:col-span-2 bg-white dark:bg-slate-900 p-8 rounded-[3.5rem] shadow-xl border dark:border-slate-800 space-y-6 text-center font-black">
+                <div className="flex items-center justify-between border-b dark:border-slate-800 pb-4"><h3 className="text-[10px] font-black dark:text-slate-100 uppercase tracking-widest leading-none"><Edit3 size={18} className="text-emerald-600 inline mr-2" /> Workspace</h3><div className="grid grid-cols-6 md:grid-cols-12 gap-1">{[1,2,3,4,5,6,7,8,9,10,11,12].map(w => <button key={w} onClick={() => setSelectedWeek(w)} className={`px-2 py-1 rounded text-[10px] font-black ${selectedWeek === w ? 'bg-blue-600 text-white shadow-md' : 'text-slate-400 hover:bg-white'}`}>{w}</button>)}</div></div>
+                <div className="space-y-4 font-black">
+                   <div className="text-left space-y-1"><label className="text-[8px] text-slate-400 font-black ml-4 uppercase tracking-widest leading-none">Lesson Topic</label><input type="text" placeholder="Lesson Topic..." className="w-full p-5 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl outline-none font-bold shadow-inner dark:text-slate-100" value={noteTopic} onChange={e => setNoteTopic(e.target.value)} /></div>
+                   {!noteImage ? (
+                    <div className="border-2 border-dashed border-slate-100 dark:border-slate-800 rounded-3xl p-8 text-center bg-slate-50/50 dark:bg-slate-800/20 hover:bg-emerald-50 transition-all group cursor-pointer relative"><Camera size={32} className="mx-auto text-slate-200 mb-3 group-hover:scale-110 transition-transform"/><p className="text-[9px] text-slate-400 font-bold uppercase mb-4 leading-none tracking-widest">Attach Board Photo</p><label className="inline-block bg-white dark:bg-slate-800 border px-6 py-2 rounded-xl text-[9px] font-black cursor-pointer shadow-sm active:scale-95 uppercase tracking-widest leading-none transition-all">Select Image<input type="file" accept="image/*" className="hidden" onChange={(e) => { const r = new FileReader(); r.onloadend = () => { setNoteImage(r.result); triggerToast("Image Attached!"); }; if(e.target.files[0]) r.readAsDataURL(e.target.files[0]); }} /></label></div>
+                   ) : (
+                    <div className="relative rounded-3xl overflow-hidden shadow-lg group"><img src={noteImage} className="w-full h-auto max-h-[300px] object-cover" alt="note attach" /><button onClick={() => setNoteImage(null)} className="absolute top-4 right-4 bg-red-500 text-white p-2 rounded-full shadow-xl hover:scale-110 active:scale-90 transition-transform leading-none"><X size={18} /></button></div>
+                   )}
+                   <div className="text-left space-y-1"><label className="text-[8px] text-slate-400 font-black ml-4 uppercase tracking-widest leading-none">Note Content</label><textarea placeholder="Type lesson content here..." className="w-full p-6 bg-slate-50 dark:bg-slate-800 border-none rounded-3xl outline-none dark:text-slate-300 font-medium h-[400px] leading-relaxed resize-none shadow-inner" value={currentNote} onChange={e => setCurrentNote(e.target.value)} /></div>
+                </div>
+             </div>
+             <div className="space-y-6">
+                <h3 className="text-[10px] font-black dark:text-slate-100 uppercase tracking-widest px-4 leading-none"><History size={18} className="text-emerald-600 inline mr-2" /> 12-Week Vault</h3>
+                <div className="space-y-4 max-h-[800px] overflow-y-auto pr-2 custom-scrollbar">
+                  {[1,2,3,4,5,6,7,8,9,10,11,12].map(wk => {
+                    const saved = note_V.find(n => n.week === wk);
+                    return (
+                      <div key={wk} className={`bg-white dark:bg-slate-900 p-6 rounded-[2.5rem] border shadow-sm transition-all ${saved ? 'border-emerald-200 cursor-pointer hover:border-emerald-500' : 'opacity-40'}`} onClick={() => saved && (setCurrentNote(saved.content), setNoteTopic(saved.topic), setSelectedWeek(saved.week), setNoteImage(saved.image || null))}>
+                         <div className="flex justify-between items-start leading-none">
+                            <span className="text-[9px] font-black px-2 py-1 rounded-lg bg-emerald-50 text-emerald-600 uppercase leading-none">Week {wk}</span>
+                            {saved && <button onClick={(e) => { e.stopPropagation(); const key = `${selectedSubject}_${selectedLevel}`; const upd = note_V.filter(x => x.week !== wk); setNoteArchives({...noteArchives, [key]: upd}); }} className="text-red-300 hover:text-red-600 transition-colors leading-none"><Trash2 size={12}/></button>}
+                         </div>
+                         <h4 className="font-black dark:text-slate-100 uppercase text-[10px] mt-2 leading-tight">{saved ? saved.topic : 'Empty Slot'}</h4>
+                         {saved && <div className="mt-3 pt-2 border-t dark:border-slate-800 text-[8px] text-slate-400 font-black flex items-center gap-1 uppercase tracking-tighter leading-none"><Clock size={8}/> Mod: {saved.date}</div>}
+                      </div>
+                    );
+                  })}
+                </div>
+             </div>
+          </div>
+        </div>
+      );
+
       case 'backup_center': return (
         <div className="max-w-4xl mx-auto pt-10 px-4 space-y-10 animate-in fade-in pb-20 text-center uppercase tracking-widest font-black leading-none">
            <button onClick={() => setCurrentModule('hub')} className="flex items-center gap-2 text-slate-500 bg-white dark:bg-slate-900 px-5 py-2.5 rounded-2xl border shadow-sm active:scale-95 text-xs font-bold transition-all leading-none"><ChevronLeft size={18} /> Hub</button>
-           <div className="bg-blue-600 p-10 rounded-[3.5rem] text-white shadow-xl flex items-center gap-8 text-left relative overflow-hidden leading-none font-black"><Database size={120} className="absolute -right-5 -bottom-5 opacity-10 leading-none font-black" /><div className="p-5 bg-white rounded-[2rem] text-blue-600 shadow-inner leading-none font-black"><Database size={40} className="leading-none font-black" /></div><div><h3 className="text-3xl font-black uppercase leading-tight leading-none font-black">Backup Center</h3><p className="text-blue-100 font-bold tracking-widest text-xs mt-2 opacity-80 leading-none uppercase tracking-widest font-black leading-none">Permanent Data Export</p></div></div>
+           <div className="bg-blue-600 p-10 rounded-[3.5rem] text-white shadow-xl flex items-center gap-8 text-left relative overflow-hidden leading-none font-black"><Database size={120} className="absolute -right-5 -bottom-5 opacity-10" /><div className="p-5 bg-white rounded-[2rem] text-blue-600 shadow-inner"><Database size={40} /></div><div><h3 className="text-3xl font-black uppercase leading-tight leading-none font-black">Backup Center</h3><p className="text-blue-100 font-bold tracking-widest text-xs mt-2 opacity-80 leading-none uppercase tracking-widest">Permanent Data Export</p></div></div>
            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 leading-none font-black">
               <button onClick={() => { const blob = new Blob([JSON.stringify({registers, notes: noteArchives, profile: userProfile, db: globalStudents}, null, 2)], { type: 'application/json' }); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `EduBridge_Backup.json`; a.click(); triggerToast("Backup Exported!"); }} className="bg-white dark:bg-slate-900 p-8 rounded-[3rem] border shadow-sm text-center font-black text-xs uppercase text-slate-700 dark:text-slate-100 hover:border-blue-500 transition-all leading-none active:scale-95 leading-none font-black">Download Backup</button>
               <label className="bg-white dark:bg-slate-900 p-8 rounded-[3rem] border shadow-sm text-center font-black text-xs uppercase text-slate-700 dark:text-slate-100 cursor-pointer hover:border-blue-500 transition-all leading-none active:scale-95 leading-none font-black">Restore Data<input type="file" accept=".json" className="hidden" onChange={(e) => { const r = new FileReader(); r.onload = (ev) => { try { const d = JSON.parse(ev.target.result); if(d.registers) setRegisters(d.registers); if(d.notes) setNoteArchives(d.notes); if(d.db) setGlobalStudents(d.db); if(d.profile) setUserProfile(d.profile); triggerToast("Restored!"); } catch(e){ triggerToast("Invalid File"); } }; if(e.target.files[0]) r.readAsText(e.target.files[0]); }} /></label>
@@ -543,11 +637,16 @@ export default function App() {
     }
   };
 
+  const copyToClipboard = (text) => {
+    const el = document.createElement('textarea'); el.value = text; document.body.appendChild(el); el.select();
+    document.execCommand('copy'); document.body.removeChild(el); triggerToast("Copied Content!");
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 font-sans pb-24 selection:bg-blue-100 text-slate-800 transition-colors duration-300">
       {renderView()}
       <div className="fixed bottom-6 left-0 right-0 pointer-events-none text-center print:hidden z-0 font-black">
-         <p className="text-[9px] font-black text-slate-300 dark:text-slate-700 uppercase tracking-[0.3em] italic leading-none font-black">IB TECHIFIED • KANO NIGERIA • 2026</p>
+         <p className="text-[9px] font-black text-slate-300 dark:text-slate-700 uppercase tracking-[0.3em] italic leading-none font-black">IBRAHIM I.I. YAMTA • 3MTT • FE/23/86231210 • KANO NIGERIA • 2026</p>
       </div>
       {showToast && !isPrinting && (
         <div className="fixed bottom-10 left-1/2 -translate-x-1/2 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 px-8 py-5 rounded-[2.5rem] shadow-2xl flex items-center gap-4 animate-in fade-in slide-in-from-bottom-5 duration-300 z-[9999] border dark:border-slate-800 font-black uppercase text-[10px] tracking-widest leading-none font-black">
