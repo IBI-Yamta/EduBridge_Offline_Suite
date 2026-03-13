@@ -21,7 +21,7 @@ import {
  * Merge logic: 
  * 1. FULL DATA RESTORE: All Curriculum, Support, and Manual content restored.
  * 2. EXPORT FIX: PDF and Word Doc now explicitly include attached images and text.
- * 3. EDUCALC STABILITY: Registers open correctly even if Registry is empty.
+ * 3. EDUCALC STABILITY: Resolved crash caused by function naming mismatch in setup.
  * 4. NORMALIZATION: "ss 1" and "ss1" link to the same database records.
  * ==============================================================================================
  */
@@ -63,7 +63,7 @@ const NIGERIAN_SCHEMES = {
   ],
   'JSS 2': [
     { subject: 'Mathematics', topics: 'Linear Equations and Inequalities. Pythagorean Theorem. Area and Volume: Cylinders and Prisms. Probability.' },
-    { subject: 'English', topics: 'Figures of Speech. Tenses: Perfect and Continuous forms. Summary writing techniques.' }
+    { subject: 'English', topics: 'Figures of Speech. Tenses: Perfect and Continuous forms. Clauses and Phrases. Summary writing techniques.' }
   ],
   'JSS 3': [
     { subject: 'Mathematics', topics: 'Quadratic Equations. Simultaneous Equations. Trigonometry. Compound Interest. Variations.' },
@@ -93,8 +93,10 @@ const SUBJECT_LISTS = {
 
 // --- HELPERS ---
 const norm = (s) => s ? s.trim().toLowerCase().replace(/\s+/g, '') : "";
-const detectCategory = (c) => {
-  const n = norm(c);
+
+const detectCategory = (className) => {
+  if (!className) return "Senior"; // Safe default
+  const n = norm(className);
   if (n.startsWith('pri') || n.startsWith('grade')) return 'Primary';
   if (n.startsWith('jss')) return 'Junior';
   if (n.startsWith('ss')) return 'Senior';
@@ -151,8 +153,9 @@ export default function App() {
     window.history.pushState({ module, ...data }, "");
   };
 
-  const goBackTo = (module) => {
-    setCurrentModule(module);
+  const goBack = () => {
+    if (window.history.length > 1) window.history.back();
+    else setCurrentModule('hub');
   };
 
   useEffect(() => {
@@ -269,7 +272,7 @@ export default function App() {
   const exportDoc = () => {
     if (!noteTopic || !currentNote) return triggerToast("No content");
     let imageHtml = noteImage ? `<div style="text-align:center; margin-bottom:20px;"><img src="${noteImage}" style="max-width:550px; border:1px solid #ddd; border-radius:10px;"/></div>` : "";
-    const html = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><style>body{font-family:sans-serif;padding:40px;line-height:1.6;}h1{color:#2563EB;text-align:center;} .meta{background:#f8fafc;padding:15px;border-radius:10px;margin-bottom:20px; border:1px solid #ddd;}</style></head><body><h1>EDUBRIDGE LESSON NOTE</h1><div class="meta"><b>PREPARED BY:</b> ${userProfile.name}<br/><b>SUBJECT:</b> ${selectedSubject}<br/><b>CLASS:</b> ${selectedLevel}<br/><b>WEEK:</b> ${selectedWeek}<br/><b>TOPIC:</b> ${noteTopic.toUpperCase()}<br/><b>DATE:</b> ${new Date().toLocaleDateString()}</div>${imageHtml}<div style="white-space:pre-wrap">${currentNote}</div><p style="margin-top:50px;font-size:10px;color:#888;">IB TECHIFIED Offline Suite • Kano 2026</p></body></html>`;
+    const html = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><style>body{font-family:sans-serif;padding:40px;line-height:1.6;}h1{color:#2563EB;text-align:center;} .meta{background:#f8fafc;padding:15px;border-radius:10px;margin-bottom:20px; border:1px solid #ddd;}</style></head><body><h1>EDUBRIDGE LESSON NOTE</h1><div class="meta"><b>PREPARED BY:</b> ${userProfile.name}<br/><b>SUBJECT:</b> ${selectedSubject}<br/><b>CLASS:</b> ${selectedLevel}<br/><b>WEEK:</b> ${selectedWeek}<br/><b>TOPIC:</b> ${noteTopic.toUpperCase()}</div>${imageHtml}<div style="white-space:pre-wrap">${currentNote}</div><p style="margin-top:50px;font-size:10px;color:#888;">IB TECHIFIED Offline Suite • Kano 2026</p></body></html>`;
     const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['\ufeff', html], { type: 'application/msword' }));
     a.download = `${noteTopic.replace(/\s+/g, '_')}_LessonNote.doc`; a.click();
     triggerToast("MS Word Export Ready");
@@ -309,36 +312,35 @@ export default function App() {
     );
 
     if (isPrinting) return (
-      <div className="bg-white text-slate-900 p-12 min-h-screen font-sans">
-        <div className="border-b-4 border-blue-600 pb-6 mb-10 text-center uppercase font-black">
-          <h1 className="text-4xl text-blue-600 mb-2">EduBridge Digital Note</h1>
-          <div className="flex justify-center gap-4 text-[10px] text-slate-500 tracking-widest">
-             <span>Teacher: {userProfile.name}</span>
-             <span>•</span>
-             <span>{selectedSubject}</span>
-             <span>•</span>
-             <span>Week {selectedWeek}</span>
-          </div>
+      <div className="bg-white text-black p-10 min-h-screen font-sans">
+        <div className="text-center border-b-2 border-black pb-4 mb-6">
+          <h1 className="text-3xl font-bold tracking-[0.2em]">EDUBRIDGE</h1>
         </div>
         
+        <div className="grid grid-cols-2 gap-y-2 mb-8 text-sm font-bold uppercase border-b-2 border-slate-100 pb-4">
+           <div className="text-slate-600">Teacher: <span className="text-black">{userProfile.name}</span></div>
+           <div className="text-right text-slate-600">Date: <span className="text-black">{new Date().toLocaleDateString()}</span></div>
+           <div className="text-slate-600">Class: <span className="text-black">{selectedLevel}</span></div>
+           <div className="text-right text-slate-600">Week: <span className="text-black">{selectedWeek}</span></div>
+           <div className="col-span-2 text-slate-600 mt-1">Subject: <span className="text-black">{selectedSubject}</span></div>
+        </div>
+
         <div className="mb-8">
-           <h2 className="text-2xl font-black uppercase text-slate-800 mb-1">Topic: {noteTopic}</h2>
-           <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest">Date: {new Date().toLocaleDateString()}</p>
+           <h2 className="text-xl font-bold uppercase underline decoration-blue-600 underline-offset-4">Topic: {noteTopic}</h2>
         </div>
 
         {noteImage && (
-          <div className="mb-10 rounded-3xl overflow-hidden border-4 border-slate-50 shadow-sm text-center">
-            <img src={noteImage} className="w-full h-auto object-contain mx-auto" alt="Board Attachment" />
+          <div className="mb-8 rounded-xl overflow-hidden border">
+            <img src={noteImage} className="w-full h-auto object-contain" alt="Board Attachment" />
           </div>
         )}
 
-        <div className="text-xl leading-relaxed whitespace-pre-wrap text-slate-800 font-medium">
+        <div className="text-lg leading-relaxed whitespace-pre-wrap text-black">
           {currentNote}
         </div>
 
-        <div className="mt-20 border-t-2 border-slate-100 pt-6 flex justify-between items-center opacity-50">
-           <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest italic">Digitally Prepared via IB TECHIFIED Offline Suite</p>
-           <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Kano Nigeria • 2026</p>
+        <div className="mt-16 pt-6 border-t text-[10px] text-slate-400 font-bold uppercase tracking-widest text-center">
+           IB TECHIFIED Offline Suite • Prepared for the 21st-Century Nigerian Classroom
         </div>
       </div>
     );
@@ -374,14 +376,22 @@ export default function App() {
       );
 
       case 'student_db': return (
-        <div className="max-w-4xl mx-auto pt-10 px-4 space-y-10 animate-in slide-in-from-right-10 pb-20 text-center uppercase tracking-widest font-black leading-none">
-          <div className="flex items-center justify-between"><button onClick={() => setCurrentModule('hub')} className="flex items-center gap-2 text-slate-500 bg-white dark:bg-slate-900 px-5 py-2.5 rounded-2xl border shadow-sm active:scale-95 text-xs font-bold transition-all leading-none"><ChevronLeft size={18} /> Hub</button><h2 className="text-xl dark:text-slate-100 uppercase tracking-tight leading-none">Student Registry</h2></div>
+        <div className="max-w-4xl mx-auto pt-10 px-4 space-y-10 animate-in slide-in-from-right-10 pb-20 text-center uppercase tracking-widest">
+          <div className="flex items-center justify-between"><button onClick={() => setCurrentModule('hub')} className="flex items-center gap-2 text-slate-500 bg-white dark:bg-slate-900 px-5 py-2.5 rounded-2xl border shadow-sm active:scale-95 text-xs font-bold transition-all leading-none"><ChevronLeft size={18} /> Hub</button><h2 className="text-xl font-black dark:text-slate-100 uppercase tracking-tight">Student Registry</h2></div>
           <div className="bg-white dark:bg-slate-900 p-8 rounded-[3.5rem] shadow-xl border dark:border-slate-800 space-y-6 text-left font-black">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 leading-none">
                <div className="space-y-1"><label className="text-[9px] text-slate-400 font-bold ml-4 uppercase leading-none">Full Name</label><input id="db_name_in" type="text" placeholder="ADAMU MUSA" className="w-full p-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl outline-none font-bold dark:text-slate-100 shadow-inner" /></div>
                <div className="space-y-1"><label className="text-[9px] text-slate-400 font-bold ml-4 uppercase leading-none">Class (e.g. SS1)</label><input id="db_class_in" type="text" placeholder="SS 1" className="w-full p-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl outline-none font-bold dark:text-slate-100 shadow-inner" /></div>
             </div>
-            <button onClick={() => { const n = document.getElementById('db_name_in').value; const c = document.getElementById('db_class_in').value; if(n && c) { addToDatabase(n, c); document.getElementById('db_name_in').value = ""; document.getElementById('db_class_in').value = ""; triggerToast("Added to Registry"); } }} className="w-full bg-orange-600 text-white p-5 rounded-2xl font-black shadow-xl uppercase tracking-widest text-[10px] active:scale-95 transition-all leading-none">Add to Registry</button>
+            <button onClick={() => { 
+                const n = document.getElementById('db_name_in').value; 
+                const c = document.getElementById('db_class_in').value; 
+                if(n && c) {
+                  setGlobalStudents([{ id: Date.now(), name: n.toUpperCase(), className: c.toUpperCase() }, ...globalStudents]);
+                  document.getElementById('db_name_in').value = ""; document.getElementById('db_class_in').value = "";
+                  triggerToast("Added to Registry");
+                }
+              }} className="w-full bg-orange-600 text-white p-5 rounded-2xl font-black shadow-xl uppercase tracking-widest text-[10px] active:scale-95 transition-all leading-none">Add to Registry</button>
           </div>
           <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-sm border overflow-hidden text-left font-black leading-none">
             <div className="p-4 border-b bg-slate-50 dark:bg-slate-800"><input type="text" placeholder="Search Database..." className="w-full bg-white dark:bg-slate-900 p-3 rounded-xl border-none outline-none font-bold shadow-inner" value={dbSearch} onChange={e => setDbSearch(e.target.value)} /></div>
@@ -394,11 +404,11 @@ export default function App() {
       );
 
       case 'support_hub':
-        const channels = [
+        const chs = [
           { t: 'Voice Call', d: '+234 703 038 554', i: <Phone className="text-blue-600"/>, l: 'tel:+234703038554' },
           { t: 'WhatsApp Chat', d: '+234 703 038 554', i: <MessageCircle className="text-green-500"/>, l: 'https://wa.me/234703038554' },
           { t: 'Official Email', d: 'ib.techified.consults.africa@gmail.com', i: <Mail className="text-orange-500"/>, l: 'mailto:ib.techified.consults.africa@gmail.com' },
-          { t: 'SMS Support', d: '+234 703 038 554', i: <MessageSquare className="text-purple-600"/>, l: 'sms:+234703038554' }
+          { t: 'SMS Help', d: '+234 703 038 554', i: <MessageSquare className="text-purple-600"/>, l: 'sms:+234703038554' }
         ];
         return (
           <div className="max-w-4xl mx-auto pt-10 px-4 space-y-10 animate-in fade-in pb-20 text-center uppercase tracking-widest font-black leading-none">
@@ -406,10 +416,10 @@ export default function App() {
             <div className="bg-indigo-600 p-10 rounded-[3.5rem] text-white shadow-xl flex items-center gap-8 text-left relative overflow-hidden">
                 <LifeBuoy size={120} className="absolute -right-5 -bottom-5 opacity-10" />
                 <div className="p-5 bg-white rounded-[2rem] text-indigo-600 shadow-inner"><MessageCircle size={40} /></div>
-                <div><h3 className="text-3xl font-black uppercase leading-tight leading-none">Support Hub</h3><p className="text-indigo-100 uppercase font-bold tracking-widest text-xs mt-2 opacity-80 uppercase leading-none tracking-widest">Direct connection to IB TECHIFIED assistance</p></div>
+                <div><h3 className="text-3xl font-black uppercase leading-tight leading-none">Support Hub</h3><p className="text-indigo-100 uppercase font-bold tracking-widest text-xs mt-2 opacity-80 uppercase leading-none tracking-widest">IB TECHIFIED assistance</p></div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-               {channels.map(ch => (
+               {chs.map(ch => (
                  <a key={ch.t} href={ch.l} target="_blank" className="bg-white dark:bg-slate-900 p-8 rounded-[3rem] border shadow-sm space-y-6 text-center hover:border-indigo-400 transition-all block group active:scale-95">
                     <div className="p-4 bg-slate-50 dark:bg-slate-800 rounded-full w-16 h-16 mx-auto flex items-center justify-center group-hover:scale-110 transition-transform font-black leading-none">{ch.i}</div>
                     <div><h3 className="text-xl font-black dark:text-slate-100 uppercase leading-none">{ch.t}</h3><p className="text-[10px] font-bold text-slate-400 mt-2 break-all uppercase leading-none tracking-widest">{ch.d}</p></div>
@@ -435,9 +445,9 @@ export default function App() {
                 <div key={g.t} className="bg-white dark:bg-slate-900 p-8 rounded-[3.5rem] border shadow-sm space-y-4 group transition-all hover:border-purple-400 leading-none">
                   <div className="flex items-center gap-4 border-b dark:border-slate-800 pb-4 leading-none"><div className="p-3 bg-slate-50 dark:bg-slate-800 rounded-2xl leading-none">{g.i}</div><h3 className="text-xl font-black text-slate-800 dark:text-slate-100 uppercase tracking-tight leading-none">{g.t}</h3></div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
-                    <div className="space-y-2 text-slate-600 dark:text-slate-400 font-black leading-none">{g.s.map((s, idx) => <p key={idx} className="text-[10px] font-bold leading-none">• {s}</p>)}</div>
-                    <div className="bg-slate-50 dark:bg-slate-800 p-4 rounded-2xl border dark:border-slate-700 shadow-inner leading-none">
-                       <pre className="text-[9px] text-slate-600 dark:text-slate-300 font-mono italic whitespace-pre-wrap mb-3 leading-relaxed leading-none">{g.p}</pre>
+                    <div className="space-y-2 text-slate-600 dark:text-slate-400 font-black">{g.s.map((s, idx) => <p key={idx} className="text-[10px] font-bold">• {s}</p>)}</div>
+                    <div className="bg-slate-50 dark:bg-slate-800 p-4 rounded-2xl border dark:border-slate-700 shadow-inner">
+                       <pre className="text-[9px] text-slate-600 dark:text-slate-300 font-mono italic whitespace-pre-wrap mb-3 leading-relaxed">{g.p}</pre>
                        <button onClick={() => { const el = document.createElement('textarea'); el.value = g.p; document.body.appendChild(el); el.select(); document.execCommand('copy'); document.body.removeChild(el); triggerToast("Copied Content!"); }} className="w-full bg-slate-900 dark:bg-slate-100 dark:text-slate-900 text-white p-3 rounded-xl text-[9px] font-black uppercase shadow-lg active:scale-95 transition-all leading-none">Copy Prompt</button>
                     </div>
                   </div>
@@ -454,7 +464,7 @@ export default function App() {
             <div className="grid grid-cols-1 gap-6 text-left leading-none font-black">
               <div className="bg-blue-600 p-10 rounded-[3.5rem] text-white shadow-xl flex items-center gap-8"><Lightbulb size={60} /><div><h3 className="text-3xl font-black uppercase leading-tight leading-none">User Manual</h3><p className="text-blue-100 uppercase font-bold tracking-widest text-xs mt-3 opacity-80 leading-relaxed leading-none">Master your digital toolkit with IB TECHIFIED.</p></div></div>
               {[{t: "EduCalc Automation", d: "Set Subject and Class. Students from your Registry auto-populate based on normalized names ('ss1' = 'ss 1'). Results sum automatically using standard grading logic. Archives track mod time."}, {t: "EduNote Workspace", d: "Prepare notes with full Curriculum support. Attach board photos using the Camera icon. Export as professional PDF or Word Doc. Entries display exact modification timestamps."}, {t: "Registry & Backup", d: "Add names to Registry once. Normalization logic ensures consistency across all classes. Use Backup Center weekly to download master JSON file for data portability across devices."}].map(g => (
-                <div key={g.t} className="bg-white dark:bg-slate-900 p-8 rounded-[3rem] border border-slate-100 dark:border-slate-800 shadow-sm space-y-4 transition-all hover:border-blue-400 leading-none"><h3 className="text-xl font-black text-slate-800 dark:text-slate-100 border-b dark:border-slate-800 pb-4 uppercase leading-none leading-none">{g.t}</h3><p className="text-sm font-bold text-slate-600 dark:text-slate-400 leading-relaxed leading-none">• {g.d}</p></div>
+                <div key={g.t} className="bg-white dark:bg-slate-900 p-8 rounded-[3rem] border border-slate-100 dark:border-slate-800 shadow-sm space-y-4 transition-all hover:border-blue-400"><h3 className="text-xl font-black text-slate-800 dark:text-slate-100 border-b dark:border-slate-800 pb-4 uppercase leading-none leading-none">{g.t}</h3><p className="text-sm font-bold text-slate-600 dark:text-slate-400 leading-relaxed">• {g.d}</p></div>
               ))}
             </div>
           </div>
@@ -471,7 +481,7 @@ export default function App() {
                   <div className="space-y-1">
                     <label className="text-[9px] text-slate-400 font-bold ml-4 uppercase">Class</label>
                     <input type="text" placeholder="e.g. SS 1" className="w-full p-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl outline-none font-bold dark:text-slate-100 shadow-inner" value={className} onChange={(e) => setClassName(e.target.value)} />
-                    {className.length > 0 && <div className="mt-2 text-[9px] font-black text-blue-600 px-4 flex items-center gap-1 leading-none"><Zap size={10} /> {detectCat(className).toUpperCase()} DETECTED</div>}
+                    {className.length > 0 && <div className="mt-2 text-[9px] font-black text-blue-600 px-4 flex items-center gap-1 leading-none"><Zap size={10} /> {detectCategory(className).toUpperCase()} DETECTED</div>}
                   </div>
                   <button onClick={handleStartEduCalc} className="w-full bg-blue-600 text-white p-5 rounded-2xl font-black shadow-xl uppercase tracking-widest text-[10px] active:scale-95 transition-all leading-none">Open Register</button>
                 </div>
@@ -504,8 +514,7 @@ export default function App() {
              <div className="overflow-x-auto px-4 leading-none"><table className="w-full border-collapse leading-none font-black">
                <thead><tr className="bg-slate-50 dark:bg-slate-800 text-[9px] font-black text-slate-400 uppercase tracking-widest border-b dark:border-slate-800 leading-none"><th className="px-10 py-6 text-left min-w-[300px] leading-none">Name</th><th className="px-2 py-6 text-center leading-none">CA 1</th><th className="px-2 py-6 text-center leading-none">CA 2</th><th className="px-2 py-6 text-center leading-none">EXAM</th><th className="px-2 py-6 text-center text-blue-600 leading-none">TOTAL</th><th className="px-2 py-6 text-center leading-none">GRADE</th><th className="px-10 py-6 text-center leading-none">X</th></tr></thead>
                <tbody className="divide-y dark:divide-slate-800 leading-none font-black">
-                 {students.length === 0 ? <tr><td colSpan="7" className="py-24 text-center opacity-40 uppercase tracking-widest leading-none"><p className="text-[10px] font-black text-slate-400 leading-none">Register is empty. import students from Registry or use "Add Student".</p></td></tr> :
-                   students.map(s => (
+                 {students.map(s => (
                    <tr key={s.id} className="hover:bg-blue-50/20 transition-colors uppercase leading-none font-black">
                      <td className="px-10 py-4 font-bold leading-none"><input type="text" className="w-full bg-transparent border-none outline-none font-black text-slate-700 dark:text-slate-100 placeholder:opacity-30 uppercase leading-none" value={s.name} onChange={(e) => updateStudent(s.id, 'name', e.target.value)} /></td>
                      <td className="px-2 py-4 leading-none"><input type="number" className="w-16 text-center mx-auto bg-white dark:bg-slate-800 border dark:border-slate-700 rounded-xl p-3 font-black text-blue-600 leading-none" value={s.ca1 || ""} onChange={(e) => updateStudent(s.id, 'ca1', e.target.value)} /></td>
@@ -559,7 +568,7 @@ export default function App() {
       );
 
       case 'edunote_view': 
-        const s_List = (NIGERIAN_SCHEMES[selectedLevel] || []).filter(s => s.subject.toLowerCase() === selectedSubject?.toLowerCase());
+        const scheme_L = (NIGERIAN_SCHEMES[selectedLevel] || []).filter(s => s.subject.toLowerCase() === selectedSubject?.toLowerCase());
         const note_V = noteArchives[`${selectedSubject}_${selectedLevel}`] || [];
         return (
         <div className="max-w-7xl mx-auto pt-10 px-4 space-y-8 animate-in slide-in-from-right-10 pb-20 text-center uppercase tracking-widest font-black">
@@ -576,13 +585,13 @@ export default function App() {
                 <div className="bg-blue-600 text-white p-8 rounded-[3.5rem] shadow-xl space-y-6 relative overflow-hidden">
                    <h3 className="text-xs uppercase tracking-widest z-10 relative leading-none">Curriculum Library</h3>
                    <div className="space-y-4 max-h-[550px] overflow-y-auto pr-2 custom-scrollbar z-10 relative">
-                      {s_List.map((item, i) => (
+                      {scheme_L.map((item, i) => (
                         <div key={i} className="bg-white/10 p-5 rounded-[2.5rem] border border-white/20 hover:bg-white/20 transition-all cursor-pointer">
                           <p className="text-[10px] font-bold leading-relaxed italic text-white/90">"{item.topics}"</p>
-                          <button onClick={() => { setNoteTopic(item.topics); setNoteImage(null); setCurrentNote(`Subject: ${selectedSubject}\nWeek: ${selectedWeek}\nTopic: ${item.topics}\n\nLearning Objectives:\n1.\n\nContent Presentation:\n-`); }} className="mt-4 text-[9px] font-black uppercase bg-white text-blue-600 px-4 py-2.5 rounded-xl w-full shadow-md active:scale-95 transition-all leading-none">Load Draft</button>
+                          <button onClick={() => { setNoteTopic(item.topics); setNoteImage(null); setCurrentNote(`Subject: ${selectedSubject}\nWeek: ${selectedWeek}\nTopic: ${item.topics}\n\nObjectives:\n1.\n\nContent Presentation:\n-`); }} className="mt-4 text-[9px] font-black uppercase bg-white text-blue-600 px-4 py-2.5 rounded-xl w-full shadow-md active:scale-95 transition-all leading-none">Load Draft</button>
                         </div>
                       ))}
-                      {!s_List.length && <p className="text-[10px] text-white/50 text-center uppercase py-4 leading-relaxed font-bold leading-none">No data</p>}
+                      {!scheme_L.length && <p className="text-[10px] text-white/50 text-center uppercase py-4 leading-relaxed font-bold leading-none">No data</p>}
                    </div>
                    <GraduationCap className="absolute -right-5 -bottom-5 opacity-10 text-white" size={150} />
                 </div>
@@ -590,7 +599,7 @@ export default function App() {
              <div className="lg:col-span-2 bg-white dark:bg-slate-900 p-8 rounded-[3.5rem] shadow-xl border dark:border-slate-800 space-y-6 text-center font-black">
                 <div className="flex items-center justify-between border-b dark:border-slate-800 pb-4"><h3 className="text-[10px] font-black dark:text-slate-100 uppercase tracking-widest leading-none"><Edit3 size={18} className="text-emerald-600 inline mr-2" /> Workspace</h3><div className="grid grid-cols-6 md:grid-cols-12 gap-1">{[1,2,3,4,5,6,7,8,9,10,11,12].map(w => <button key={w} onClick={() => setSelectedWeek(w)} className={`px-2 py-1 rounded text-[10px] font-black ${selectedWeek === w ? 'bg-blue-600 text-white shadow-md' : 'text-slate-400 hover:bg-white'}`}>{w}</button>)}</div></div>
                 <div className="space-y-4 font-black">
-                   <div className="text-left space-y-1"><label className="text-[8px] text-slate-400 font-black ml-4 uppercase tracking-widest leading-none">Lesson Topic</label><input type="text" placeholder="Topic Title..." className="w-full p-5 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl outline-none font-bold shadow-inner dark:text-slate-100" value={noteTopic} onChange={e => setNoteTopic(e.target.value)} /></div>
+                   <div className="text-left space-y-1"><label className="text-[8px] text-slate-400 font-black ml-4 uppercase tracking-widest leading-none">Lesson Topic</label><input type="text" placeholder="Lesson Topic..." className="w-full p-5 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl outline-none font-bold shadow-inner dark:text-slate-100" value={noteTopic} onChange={e => setNoteTopic(e.target.value)} /></div>
                    {!noteImage ? (
                     <div className="border-2 border-dashed border-slate-100 dark:border-slate-800 rounded-3xl p-8 text-center bg-slate-50/50 dark:bg-slate-800/20 hover:bg-emerald-50 transition-all group cursor-pointer relative"><Camera size={32} className="mx-auto text-slate-200 mb-3 group-hover:scale-110 transition-transform"/><p className="text-[9px] text-slate-400 font-bold uppercase mb-4 leading-none tracking-widest">Attach Board Photo</p><label className="inline-block bg-white dark:bg-slate-800 border px-6 py-2 rounded-xl text-[9px] font-black cursor-pointer shadow-sm active:scale-95 uppercase tracking-widest leading-none transition-all">Select Image<input type="file" accept="image/*" className="hidden" onChange={(e) => { const r = new FileReader(); r.onloadend = () => { setNoteImage(r.result); triggerToast("Image Attached!"); }; if(e.target.files[0]) r.readAsDataURL(e.target.files[0]); }} /></label></div>
                    ) : (
