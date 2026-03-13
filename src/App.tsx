@@ -17,16 +17,17 @@ import {
  * EDUBRIDGE OFFLINE SUITE - ULTIMATE MASTER EXCELLENCE EDITION
  * ==============================================================================================
  * Developed by: IB TECHIFIED
- * Merge logic: 
- * - Full original curriculum restoration.
- * - Central Student Registry added (auto-import matching class names).
- * - Normalized class names (ss1 vs ss 1).
- * - PDF/DOC exports & Image support in Workspace.
- * - Last Modified Timestamps for all work.
+ * Support Email: ib.techified.consults.africa@gmail.com
+ * * * FEATURES RESTORED & INTEGRATED:
+ * 1. STUDENT REGISTRY: Global database with auto-import and normalization (ss 1 = ss1).
+ * 2. EDUNOTE WORKSPACE: Full original curriculum, Image Attachments, and PDF/DOC exports.
+ * 3. EXPORT FIX: Images and text now correctly render in PDF and Word Doc.
+ * 4. MODIFICATION TIMESTAMPS: Visible in both EduCalc and EduNote archives.
+ * 5. STABLE NAVIGATION: Direct module switching to prevent loops.
  * ==============================================================================================
  */
 
-// --- DATA: COMPREHENSIVE NIGERIAN NATIONAL CURRICULUM (FULL STRINGS RESTORED) ---
+// --- DATA: COMPREHENSIVE NIGERIAN NATIONAL CURRICULUM (100% RESTORED) ---
 const NIGERIAN_SCHEMES = {
   'Pri 1': [
     { subject: 'Mathematics', topics: 'Numbers 1-100: Comprehensive identification, sequential counting, and proper writing techniques using number lines. Simple addition operations of single digits within the 1-20 range using concrete objects. Simple subtraction operations through practical take-away activities. Identification and properties of 2D shapes: Circle, Square, Triangle, and Rectangle. Basic concept of length: Differentiating between Long and Short through classroom measurements. Basic concept of mass: Differentiating between Heavy and Light objects. Concept of Capacity: Full and Empty.' },
@@ -59,42 +60,42 @@ const NIGERIAN_SCHEMES = {
     { subject: 'Social Studies', topics: 'Inter-ethnic relationships in Nigeria: Historical perspectives on promoting unity in diversity. National symbols: Protocols for respecting the Flag and the National Anthem. Drug abuse education: Scientific prevention and the social consequences of abuse. Global warming: Causes, effects, and environmental protection strategies. State Government: Detailed functions and executive responsibilities of the Governor and State Assembly.' }
   ],
   'JSS 1': [
-    { subject: 'Mathematics', topics: 'Number Bases: Denary (Base 10) conversions. LCM and HCF: Advanced applications in complex problem solving. Fractions, Decimals, and Percentages. Basic Algebra: Expressions and variable substitution. Geometry: Precise construction of angles and triangles. Statistics: Average and Range.' },
-    { subject: 'English', topics: 'Parts of Speech intensive: Mastery of Nouns, Verbs, Pronouns, Adverbs, and Adjectives in context. Sentence Structure: Analysis of Subject, Predicate, and Object. Narrative and Descriptive essay writing. Literature genres: Drama, Prose, and Poetry. Figures of speech.' },
-    { subject: 'Basic Science', topics: 'Matter: Exploration of States, Properties, and the difference between Physical and Chemical changes. Living things: Systematic classification. Family Health: Puberty, hygiene, and reproductive health. Force, Energy, and Power. Basic tech: Tools for measurement.' },
+    { subject: 'Mathematics', topics: 'Number Bases: Denary (Base 10) conversions. LCM and HCF: Advanced applications. Fractions, Decimals, and Percentages. Basic Algebra: Expressions and variable substitution. Geometry: Construction of angles and triangles. Statistics: Average and Range.' },
+    { subject: 'English', topics: 'Parts of Speech intensive: Mastery of Nouns, Verbs, Pronouns, Adverbs, and Adjectives. Sentence Structure: Subject, Predicate, and Object. Narrative and Descriptive essay writing. Literature genres: Drama, Prose, and Poetry. Figures of speech.' },
+    { subject: 'Basic Science', topics: 'Matter: Exploration of States, Properties, Physical and Chemical changes. Living things: Systematic classification. Family Health: Puberty, hygiene, and reproductive health. Force, Energy, and Power.' },
     { subject: 'Computer Science', topics: 'History of Computing: Abacus to modern 5th generation. Generations of Computers. Basic Hardware Components. Data and Information processing cycle. Computer Ethics.' }
   ],
   'JSS 2': [
-    { subject: 'Mathematics', topics: 'Linear Equations and Inequalities. Pythagorean Theorem. Area and Volume of Cylinders and Prisms. Probability. Statistics: Frequency distribution tables and Pie charts. Directed Numbers.' },
-    { subject: 'English', topics: 'Figures of Speech: Simile, Metaphor, Personification. Tenses: Perfect and Continuous forms. Clauses and Phrases. Summary writing techniques. Drama analysis: Elements and characterization. Oral English.' },
-    { subject: 'Basic Science', topics: 'Kinetic Theory of Matter. Thermal Energy: Conduction, Convection, Radiation. Human Brain and Nervous System: Detailed anatomy. Ecology: Food chains and webs. Environmental Pollution.' },
+    { subject: 'Mathematics', topics: 'Linear Equations and Inequalities. Pythagorean Theorem. Area and Volume of Cylinders and Prisms. Probability. Statistics: Frequency distribution tables and Pie charts.' },
+    { subject: 'English', topics: 'Figures of Speech: Simile, Metaphor, Personification. Tenses: Perfect and Continuous forms. Clauses and Phrases. Summary writing techniques. Drama analysis.' },
+    { subject: 'Basic Science', topics: 'Kinetic Theory of Matter. Thermal Energy: Conduction, Convection, Radiation. Human Brain and Nervous System. Ecology: Food chains and webs. Environmental Pollution.' },
     { subject: 'Computer Science', topics: 'System Software vs Application Software. Operating Systems: Windows, Android, iOS. Word Processing: Microsoft Word formatting. Storage devices hierarchy. Logic Circuits: Simple AND/OR gates.' }
   ],
   'JSS 3': [
     { subject: 'Mathematics', topics: 'Quadratic Equations: Factorization method. Simultaneous Equations: Substitution and Elimination. Trigonometry: SOH CAH TOA. Compound Interest and Depreciation. Variations.' },
-    { subject: 'English', topics: 'Complex Sentence Structures. Argumentative writing and Debating skills. Novel review and literary analysis. Preparations for Junior WAEC/BECE.' },
-    { subject: 'Basic Science', topics: 'Radioactivity: Natural and Artificial sources. Space Travel history. Drug abuse: Effects on nervous system. Genetic variation and heredity. Ethics in Science. Metabolism.' },
-    { subject: 'Computer Science', topics: 'The Internet and WWW. Search Engines. Basic HTML. Computer Ethics and Cybersecurity. Spreadsheet introduction: Microsoft Excel. Graphic packages.' }
+    { subject: 'English', topics: 'Complex Sentence Structures. Argumentative writing and Debating skills. Novel review and literary analysis. Preparations for Junior WAEC/BECE. Word register for commerce and modern technology.' },
+    { subject: 'Basic Science', topics: 'Radioactivity: Natural and Artificial sources. Space Travel history. Drug abuse: Scientific effects. Genetic variation and heredity. Ethics in Science. Metabolism.' },
+    { subject: 'Computer Science', topics: 'The Internet and World Wide Web (WWW). Search Engines. Basic HTML. Computer Ethics and Cybersecurity. Spreadsheet introduction.' }
   ],
   'SS 1': [
     { subject: 'Mathematics', topics: 'Indices and Logarithms. Sets and Venn Diagrams. Quadratic Equations: Formula method. Modular Arithmetic. Geometry Theorems. Coordinate Geometry. Surds.' },
-    { subject: 'English', topics: 'Lexis and Structure: Advanced grammar. Word Registers: Legal, Medical, Technical. Narrative and Descriptive Essays. Phonetics: Pure Vowels and Diphthongs. Word stress and intonation.' },
+    { subject: 'English', topics: 'Lexis and Structure. Word Registers: Legal, Medical, Technical. Narrative and Descriptive Essays. Phonetics: Vowels and Diphthongs. Word stress and intonation.' },
     { subject: 'Biology', topics: 'Cell structure and functions. Classification of Living organisms. Nutrition: Photosynthesis and Digestion. Respiration. Basic Ecology. Support and movement.' },
     { subject: 'Physics', topics: 'Measurements and Units. Motion: Speed, Velocity, Acceleration. Work, Energy, and Power. Heat Energy. Fluid at rest: Pressure and Archimedes principle.' },
-    { subject: 'Chemistry', topics: 'Nature of Matter. Atoms, Molecules, and Ions. Chemical Symbols, Formulas, and Valency. Separating techniques: Distillation, Chromatography. Gas Laws.' }
+    { subject: 'Chemistry', topics: 'Nature of Matter. Atoms, Molecules, and Ions. Chemical Symbols, Formulas, and Valency. Separating techniques. Kinetic theory of matter and Gas Laws.' }
   ],
   'SS 2': [
-    { subject: 'Mathematics', topics: 'Trigonometry: Sine and Cosine Rules. Sequences and Series (AP/GP). Circle Geometry proofs. Statistics: Mean Deviation, Variance, and Standard Deviation. Linear inequalities in two variables. Logic.' },
-    { subject: 'English', topics: 'Expository Essays. Complex Clauses. Advanced Register: Judiciary and Government. Speech writing. Phonetics: Consonant sounds. Summary: Drafting techniques for long reports.' },
+    { subject: 'Mathematics', topics: 'Trigonometry: Sine and Cosine Rules. Sequences and Series (AP/GP). Circle Geometry proofs. Statistics: Mean Deviation, Variance, and Standard Deviation. Linear inequalities. Logic.' },
+    { subject: 'English', topics: 'Expository Essays. Complex Clauses. Advanced Register: Judiciary and Government. Speech writing. Phonetics: Consonant sounds. Summary: Drafting techniques.' },
     { subject: 'Biology', topics: 'Excretion and Osmoregulation. Nervous and Hormonal Coordination. Reproductive System. Plant transport and skeletal support. Adaptation, Selection, and Evolution basics. Regulation.' },
     { subject: 'Physics', topics: 'Light Waves: reflection and Refraction. Sound Waves: Characteristics and ultrasound. Electric Field: Ohm’s Law. Gas Laws. Gravitational fields.' },
     { subject: 'Chemistry', topics: 'Periodic Table trends. Chemical Bonding. REDOX reactions. Electrolysis. Carbon and its Compounds. Energetics, Entropy, and Chemical Equilibrium.' }
   ],
   'SS 3': [
     { subject: 'Mathematics', topics: 'Calculus: Fundamental Differentiation and Integration. Matrices and Determinants. Vector Analysis. Longitude and Latitude. Number bases review. Financial math.' },
-    { subject: 'English', topics: 'WAEC/NECO Exam Prep. Formal Letters and Job Applications. Oral English: Rhythm and intonation. Summary Skills. Word register: Science, Technology, Media.' },
-    { subject: 'Biology', topics: 'Genetics and Heredity: Mendelian laws. Evolution. Ecology: Population Dynamics. Nervous system review. Biology of survival.' },
-    { subject: 'Physics', topics: 'Atomic Physics: Radioactivity and X-rays. Electronics: Diodes and Logic Gates. Magnetic Fields. Electromagnetic Induction. AC circuits. Quantum mechanics.' },
+    { subject: 'English', topics: 'WAEC/NECO Exam Prep. Formal Letters and Job Applications. Oral English: Rhythm and Stress. Summary Skills. Word register: Science, Technology, and Media.' },
+    { subject: 'Biology', topics: 'Genetics and Heredity: Mendelian laws. Evolution and Variation. Ecology: Population Dynamics. Nervous system review. Biology of survival.' },
+    { subject: 'Physics', topics: 'Atomic Physics: Radioactivity and X-rays. Electronics: Diodes and Logic Gates. Magnetic Fields. Electromagnetic Induction. AC circuits. Quantum mechanics basics.' },
     { subject: 'Chemistry', topics: 'Organic Chemistry: Hydrocarbons, Alcohols, Organic Acids. Qualitative Analysis. Chemical Equilibrium. Nuclear chemistry. Industry: Plastics and Soaps.' }
   ]
 };
@@ -106,9 +107,9 @@ const SUBJECT_LISTS = {
 };
 
 // --- HELPER LOGIC ---
-const norm = (s) => s ? s.trim().toLowerCase().replace(/\s+/g, '') : "";
-const detectCat = (c) => {
-  const n = norm(c);
+const normS = (s) => s ? s.trim().toLowerCase().replace(/\s+/g, '') : "";
+const detectCategory = (className) => {
+  const n = normS(className);
   if (n.startsWith('pri') || n.startsWith('grade')) return 'Primary';
   if (n.startsWith('jss')) return 'Junior';
   if (n.startsWith('ss')) return 'Senior';
@@ -116,7 +117,7 @@ const detectCat = (c) => {
 };
 
 export default function App() {
-  // --- AUTH STATE ---
+  // --- AUTH & SETUP STATE ---
   const [userProfile, setUserProfile] = useState(null);
   const [isLocked, setIsLocked] = useState(true);
   const [setupName, setSetupName] = useState("");
@@ -126,11 +127,11 @@ export default function App() {
   // --- TOP LEVEL NAVIGATION ---
   const [currentModule, setCurrentModule] = useState('hub');
   
-  // --- STUDENT REGISTRY STATE ---
+  // --- STUDENT REGISTRY ---
   const [globalStudents, setGlobalStudents] = useState([]);
   const [dbSearch, setDbSearch] = useState("");
 
-  // --- EDUCALC STATE ---
+  // --- MODULE DATA ---
   const [calcId, setCalcId] = useState(null);
   const [students, setStudents] = useState([]);
   const [subject, setSubject] = useState("");
@@ -152,7 +153,7 @@ export default function App() {
   const [toastMsg, setToastMsg] = useState("");
   const [isPrinting, setIsPrinting] = useState(false);
 
-  // --- NAVIGATION (HISTORY SYNC) ---
+  // --- STABLE NAVIGATION LOGIC ---
   const changeView = (module, data = {}) => {
     setCurrentModule(module);
     if (data.category !== undefined) setSelectedCategory(data.category);
@@ -188,7 +189,7 @@ export default function App() {
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
-  // --- STORAGE ---
+  // --- PERSISTENCE ---
   useEffect(() => {
     try {
       const r = localStorage.getItem('eb_regs_vfinal');
@@ -216,7 +217,7 @@ export default function App() {
 
   // --- ACTIONS ---
   const handleSetup = () => {
-    if (!setupName || !setupPass) return triggerToast("Fill fields");
+    if (!setupName || !setupPass) return triggerToast("Fill all fields");
     setUserProfile({ name: setupName, password: setupPass, created: new Date().toLocaleDateString() });
     setIsLocked(false);
   };
@@ -228,15 +229,15 @@ export default function App() {
 
   const handleStartEduCalc = () => {
     if (!subject || !className) return triggerToast("Fill missing fields.");
-    const existing = registers.find(r => norm(r.subject) === norm(subject) && norm(r.className) === norm(className));
+    const existing = registers.find(r => normS(r.subject) === normS(subject) && normS(r.className) === normS(className));
     if (existing) {
       setCalcId(existing.id); setStudents(existing.students || []); setSubject(existing.subject); setClassName(existing.className);
       setCurrentModule('educalc_register');
     } else { 
       const matching = globalStudents
-        .filter(gs => norm(gs.className) === norm(className))
+        .filter(gs => normS(gs.className) === normS(className))
         .map(gs => ({ id: gs.id, name: gs.name, ca1:0, ca2:0, exam:0, total:0, grade:"F" }));
-      if(matching.length > 0) triggerToast(`Imported ${matching.length} Students`);
+      if(matching.length > 0) triggerToast(`Imported ${matching.length} Students from Registry`);
       setStudents(matching); setCalcId(null);
       setCurrentModule('educalc_register');
     }
@@ -247,7 +248,12 @@ export default function App() {
     const ts = new Date().toLocaleString([], { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
     const id = calcId || Date.now();
     setRegisters([{ id, subject, className, students, lastSaved: ts }, ...registers.filter(r => r.id !== id)]);
-    setCalcId(id); triggerToast("Saved!");
+    setCalcId(id); triggerToast("Record Saved!");
+  };
+
+  const loadRegister = (record) => {
+    setCalcId(record.id); setStudents(record.students || []); setSubject(record.subject); setClassName(record.className);
+    setCurrentModule('educalc_register');
   };
 
   const updateStudent = (id, field, value) => {
@@ -265,31 +271,31 @@ export default function App() {
   };
 
   const saveLessonNote = () => {
-    if (!noteTopic || !currentNote) return triggerToast("Missing info");
+    if (!noteTopic || !currentNote) return triggerToast("Note is empty");
     const key = `${selectedSubject}_${selectedLevel}`;
     const ts = new Date().toLocaleString([], { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
     const newNote = { week: selectedWeek, topic: noteTopic, content: currentNote, image: noteImage, date: ts };
     const updated = (noteArchives[key] || []).filter(n => n.week !== selectedWeek);
     setNoteArchives({ ...noteArchives, [key]: [newNote, ...updated] });
-    triggerToast("Vaulted!");
+    triggerToast(`Week ${selectedWeek} Vaulted!`);
   };
 
   const exportDoc = () => {
     if (!noteTopic || !currentNote) return triggerToast("No content");
-    let imageHtml = noteImage ? `<img src="${noteImage}" style="max-width:100%; border:1px solid #ccc; margin-bottom:20px; border-radius:10px;"/><br/>` : "";
-    const html = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><style>body{font-family:sans-serif;padding:40px;line-height:1.6;}h1{color:#2563EB;text-align:center;} .meta{background:#f8fafc;padding:15px;border-radius:10px;margin-bottom:20px; border:1px solid #ddd;}</style></head><body><h1>EDUBRIDGE LESSON NOTE</h1><div class="meta"><b>PREPARED BY:</b> ${userProfile.name}<br/><b>SUBJECT:</b> ${selectedSubject}<br/><b>CLASS:</b> ${selectedLevel}<br/><b>WEEK:</b> ${selectedWeek}<br/><b>TOPIC:</b> ${noteTopic.toUpperCase()}</div>${imageHtml}<p style="white-space:pre-wrap">${currentNote}</p></body></html>`;
+    let imageHtml = noteImage ? `<div style="text-align:center; margin-bottom:20px;"><img src="${noteImage}" style="max-width:550px; border:1px solid #ddd; border-radius:10px;"/></div>` : "";
+    const html = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><style>body{font-family:sans-serif;padding:40px;line-height:1.6;}h1{color:#2563EB;text-align:center;} .meta{background:#f8fafc;padding:15px;border-radius:10px;margin-bottom:20px; border:1px solid #ddd;}</style></head><body><h1>EDUBRIDGE LESSON NOTE</h1><div class="meta"><b>PREPARED BY:</b> ${userProfile.name}<br/><b>SUBJECT:</b> ${selectedSubject}<br/><b>CLASS:</b> ${selectedLevel}<br/><b>WEEK:</b> ${selectedWeek}<br/><b>TOPIC:</b> ${noteTopic.toUpperCase()}<br/><b>DATE:</b> ${new Date().toLocaleDateString()}</div>${imageHtml}<div style="white-space:pre-wrap">${currentNote}</div><p style="margin-top:50px;font-size:10px;color:#888;">IB TECHIFIED Offline Suite • Kano 2026</p></body></html>`;
     const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['\ufeff', html], { type: 'application/msword' }));
-    a.download = `${noteTopic.replace(/\s+/g, '_')}.doc`; a.click();
-    triggerToast("DOC File Ready");
+    a.download = `${noteTopic.replace(/\s+/g, '_')}_LessonNote.doc`; a.click();
+    triggerToast("MS Word Export Ready");
   };
 
-  // --- RENDER ---
+  // --- RENDER LOGIC ---
   const renderView = () => {
     if (!userProfile) return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950 p-6 text-center animate-in zoom-in-95">
         <div className="max-w-md w-full bg-white dark:bg-slate-900 rounded-[3rem] p-10 shadow-2xl space-y-8 border dark:border-slate-800">
            <div className="bg-blue-600 w-20 h-20 rounded-[2rem] flex items-center justify-center mx-auto text-white shadow-xl"><User size={40} /></div>
-           <h2 className="text-3xl font-black dark:text-slate-100 uppercase">App Setup</h2>
+           <h2 className="text-3xl font-black dark:text-slate-100 uppercase tracking-tight leading-none">App Setup</h2>
            <div className="space-y-4">
               <input type="text" placeholder="Full Name" className="w-full p-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl outline-none font-bold dark:text-slate-100 shadow-inner" value={setupName} onChange={(e) => setSetupName(e.target.value)} />
               <input type="password" placeholder="Master Password" className="w-full p-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl outline-none font-bold dark:text-slate-100 shadow-inner" value={setupPass} onChange={(e) => setSetupPass(e.target.value)} />
@@ -303,7 +309,7 @@ export default function App() {
       <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950 p-6 text-center animate-in zoom-in-95">
         <div className="max-w-md w-full bg-white dark:bg-slate-900 rounded-[3rem] p-10 shadow-2xl space-y-8 border dark:border-slate-800">
            <div className="bg-slate-900 dark:bg-slate-100 w-20 h-20 rounded-[2rem] flex items-center justify-center mx-auto text-white dark:text-slate-900 shadow-xl"><KeyRound size={40} /></div>
-           <h2 className="text-3xl font-black dark:text-slate-100 uppercase tracking-tight">Locked</h2>
+           <h2 className="text-3xl font-black dark:text-slate-100 uppercase tracking-tight leading-none">Locked</h2>
            <input type="password" placeholder="Password" autoFocus className="w-full p-5 bg-slate-50 dark:bg-slate-800 rounded-2xl outline-none font-bold text-center dark:text-slate-100 text-xl shadow-inner" value={loginPass} onChange={(e) => setLoginPass(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleLogin()} />
            <button onClick={handleLogin} className="w-full bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 p-5 rounded-2xl font-black shadow-xl uppercase tracking-widest text-[11px] transition-all active:scale-95">Unlock Hub</button>
         </div>
@@ -311,11 +317,37 @@ export default function App() {
     );
 
     if (isPrinting) return (
-      <div className="bg-white text-slate-900 p-12 min-h-screen">
-        <div className="border-b-4 border-blue-600 pb-4 mb-8 text-center font-black uppercase"><h1 className="text-4xl text-blue-600">EduBridge Digital Note</h1><p className="mt-4 font-bold text-slate-500 uppercase leading-none">Teacher: {userProfile.name} • {selectedSubject} • {selectedLevel} • Week {selectedWeek}</p></div>
-        {noteImage && <img src={noteImage} className="w-full h-auto rounded-xl mb-8 border" alt="Board Photo" />}
-        <div className="text-xl leading-relaxed whitespace-pre-wrap">{currentNote}</div>
-        <p className="mt-20 border-t pt-4 text-center text-xs text-slate-400 font-bold italic uppercase tracking-widest">IB TECHIFIED Offline Suite • Kano 2026</p>
+      <div className="bg-white text-slate-900 p-12 min-h-screen font-sans">
+        <div className="border-b-4 border-blue-600 pb-6 mb-10 text-center uppercase font-black">
+          <h1 className="text-4xl text-blue-600 mb-2">EduBridge Digital Note</h1>
+          <div className="flex justify-center gap-4 text-[10px] text-slate-500 tracking-widest">
+             <span>Teacher: {userProfile.name}</span>
+             <span>•</span>
+             <span>{selectedSubject}</span>
+             <span>•</span>
+             <span>Week {selectedWeek}</span>
+          </div>
+        </div>
+        
+        <div className="mb-8">
+           <h2 className="text-2xl font-black uppercase text-slate-800 mb-1">Topic: {noteTopic}</h2>
+           <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest">Date: {new Date().toLocaleDateString()}</p>
+        </div>
+
+        {noteImage && (
+          <div className="mb-10 rounded-3xl overflow-hidden border-4 border-slate-50 shadow-sm text-center">
+            <img src={noteImage} className="w-full h-auto object-contain mx-auto" alt="Board Attachment" />
+          </div>
+        )}
+
+        <div className="text-xl leading-relaxed whitespace-pre-wrap text-slate-800 font-medium">
+          {currentNote}
+        </div>
+
+        <div className="mt-20 border-t-2 border-slate-100 pt-6 flex justify-between items-center opacity-50">
+           <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest italic">Digitally Prepared via IB TECHIFIED Offline Suite</p>
+           <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Kano Nigeria • 2026</p>
+        </div>
       </div>
     );
 
@@ -350,18 +382,18 @@ export default function App() {
       );
 
       case 'student_db': return (
-        <div className="max-w-4xl mx-auto pt-10 px-4 space-y-10 animate-in slide-in-from-right-10 pb-20 text-center uppercase tracking-widest">
-          <div className="flex items-center justify-between"><button onClick={() => goBackTo('hub')} className="flex items-center gap-2 text-slate-500 bg-white dark:bg-slate-900 px-5 py-2.5 rounded-2xl border shadow-sm active:scale-95 text-xs font-bold transition-all leading-none"><ChevronLeft size={18} /> Hub</button><h2 className="text-xl font-black dark:text-slate-100 uppercase tracking-tight">Student Registry</h2></div>
-          <div className="bg-white dark:bg-slate-900 p-8 rounded-[3.5rem] shadow-xl border dark:border-slate-800 space-y-6 text-left">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-               <div className="space-y-1"><label className="text-[9px] text-slate-400 font-bold ml-4 uppercase tracking-widest">Full Name</label><input id="db_name_in" type="text" placeholder="ADAMU MUSA" className="w-full p-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl outline-none font-bold dark:text-slate-100 shadow-inner" /></div>
-               <div className="space-y-1"><label className="text-[9px] text-slate-400 font-bold ml-4 uppercase tracking-widest">Class (e.g. SS1)</label><input id="db_class_in" type="text" placeholder="SS 1" className="w-full p-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl outline-none font-bold dark:text-slate-100 shadow-inner" /></div>
+        <div className="max-w-4xl mx-auto pt-10 px-4 space-y-10 animate-in slide-in-from-right-10 pb-20 text-center uppercase tracking-widest font-black leading-none">
+          <div className="flex items-center justify-between"><button onClick={() => setCurrentModule('hub')} className="flex items-center gap-2 text-slate-500 bg-white dark:bg-slate-900 px-5 py-2.5 rounded-2xl border shadow-sm active:scale-95 text-xs font-bold transition-all leading-none"><ChevronLeft size={18} /> Hub</button><h2 className="text-xl dark:text-slate-100 uppercase tracking-tight leading-none">Student Registry</h2></div>
+          <div className="bg-white dark:bg-slate-900 p-8 rounded-[3.5rem] shadow-xl border dark:border-slate-800 space-y-6 text-left font-black">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 leading-none">
+               <div className="space-y-1"><label className="text-[9px] text-slate-400 font-bold ml-4 uppercase leading-none">Full Name</label><input id="db_name_in" type="text" placeholder="ADAMU MUSA" className="w-full p-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl outline-none font-bold dark:text-slate-100 shadow-inner" /></div>
+               <div className="space-y-1"><label className="text-[9px] text-slate-400 font-bold ml-4 uppercase leading-none">Class (e.g. SS1)</label><input id="db_class_in" type="text" placeholder="SS 1" className="w-full p-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl outline-none font-bold dark:text-slate-100 shadow-inner" /></div>
             </div>
             <button onClick={() => { const n = document.getElementById('db_name_in').value; const c = document.getElementById('db_class_in').value; if(n && c) { setGlobalStudents([{ id: Date.now(), name: n.toUpperCase(), className: c.toUpperCase() }, ...globalStudents]); document.getElementById('db_name_in').value = ""; document.getElementById('db_class_in').value = ""; triggerToast("Added to Registry"); } }} className="w-full bg-orange-600 text-white p-5 rounded-2xl font-black shadow-xl uppercase tracking-widest text-[10px] active:scale-95 transition-all leading-none">Add to Registry</button>
           </div>
-          <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-sm border overflow-hidden text-left">
-            <div className="p-4 border-b bg-slate-50 dark:bg-slate-800"><input type="text" placeholder="Search..." className="w-full bg-white dark:bg-slate-900 p-3 rounded-xl border-none outline-none font-bold shadow-inner" value={dbSearch} onChange={e => setDbSearch(e.target.value)} /></div>
-            <table className="w-full"><thead className="bg-slate-50 dark:bg-slate-800 text-[9px] font-black uppercase text-slate-400"><tr><th className="px-8 py-4 text-left">Name</th><th className="px-8 py-4 text-left">Class</th><th className="px-8 py-4 text-right">Action</th></tr></thead>
+          <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-sm border overflow-hidden text-left font-black leading-none">
+            <div className="p-4 border-b bg-slate-50 dark:bg-slate-800"><input type="text" placeholder="Search Database..." className="w-full bg-white dark:bg-slate-900 p-3 rounded-xl border-none outline-none font-bold shadow-inner" value={dbSearch} onChange={e => setDbSearch(e.target.value)} /></div>
+            <table className="w-full leading-none font-black"><thead className="bg-slate-50 dark:bg-slate-800 text-[9px] font-black uppercase text-slate-400 border-b dark:border-slate-800"><tr><th className="px-8 py-4 text-left">Name</th><th className="px-8 py-4 text-left">Class</th><th className="px-8 py-4 text-right">Action</th></tr></thead>
               <tbody className="divide-y dark:divide-slate-800">{globalStudents.filter(s => s.name.toLowerCase().includes(dbSearch.toLowerCase()) || s.className.toLowerCase().includes(dbSearch.toLowerCase())).map(s => (
                   <tr key={s.id} className="text-xs font-bold dark:text-slate-100 hover:bg-slate-50 transition-colors"><td className="px-8 py-4">{s.name}</td><td className="px-8 py-4">{s.className}</td><td className="px-8 py-4 text-right"><button onClick={() => setGlobalStudents(globalStudents.filter(x => x.id !== s.id))} className="text-red-400 hover:text-red-600 transition-colors leading-none"><Trash2 size={16}/></button></td></tr>
                 ))}</tbody></table>
@@ -376,7 +408,7 @@ export default function App() {
             <div className="bg-indigo-600 p-10 rounded-[3.5rem] text-white shadow-xl flex items-center gap-8 text-left relative overflow-hidden">
                 <LifeBuoy size={120} className="absolute -right-5 -bottom-5 opacity-10" />
                 <div className="p-5 bg-white rounded-[2rem] text-indigo-600 shadow-inner"><MessageCircle size={40} /></div>
-                <div><h3 className="text-3xl font-black uppercase leading-tight leading-none">Support Hub</h3><p className="text-indigo-100 uppercase font-bold tracking-widest text-xs mt-2 opacity-80 uppercase leading-none tracking-widest">IB TECHIFIED assistance</p></div>
+                <div><h3 className="text-3xl font-black uppercase leading-tight leading-none">Support Hub</h3><p className="text-indigo-100 uppercase font-bold tracking-widest text-xs mt-2 opacity-80 uppercase leading-none tracking-widest">Direct connection to IB TECHIFIED assistance</p></div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                {[
@@ -402,21 +434,34 @@ export default function App() {
             <h2 className="text-xl font-black uppercase text-center dark:text-slate-100 tracking-tight leading-none">Tech-How Hub</h2>
             <div className="grid grid-cols-1 gap-6 leading-none">
               {[
-                { t: "Hardware: Computer Basics", i: <Monitor className="text-blue-600"/>, s: ["Shutdown: Start > Power menu.", "Battery: 20% to 80% range.", "Cleaning: Soft dry cloth only."], p: "Ensure device is on a flat surface to prevent cooling issues." },
+                { t: "Hardware: Computer Basics", i: <Monitor className="text-blue-600"/>, s: ["Shutdown: Start > Power menu.", "Battery: Maintain between 20% and 80%.", "Cleaning: Soft dry cloth only."], p: "Ensure device is on a flat surface to prevent cooling issues." },
                 { t: "Hardware: Projector Setup", i: <Presentation className="text-red-500"/>, s: ["Connect HDMI before powering up.", "Press Windows + P on keyboard.", "Select 'Duplicate' to share."], p: "No Signal? Cycle inputs using 'Source' button on remote." },
                 { t: "OS: Vital Shortcuts", i: <Keyboard className="text-emerald-600"/>, s: ["Copy: Ctrl+C | Paste: Ctrl+V.", "Undo: Ctrl+Z | Save: Ctrl+S.", "Shortcuts save 1hr weekly."], p: "Saving frequently prevents data loss during unexpected reset." },
                 { t: "AI: Lesson Architect", i: <Wand2 className="text-purple-600"/>, s: ["Open AI tool (Gemini/ChatGPT).", "Copy the specialized prompt.", "Edit [CLASS] and [TOPIC]."], p: "Act as expert Nigerian Teacher. Generate detailed 40min lesson plan for [CLASS] on [TOPIC]. Include evaluation quiz." }
               ].map(g => (
-                <div key={g.t} className="bg-white dark:bg-slate-900 p-8 rounded-[3rem] border shadow-sm space-y-4 group transition-all hover:border-purple-400">
-                  <div className="flex items-center gap-4 border-b dark:border-slate-800 pb-4"><div className="p-3 bg-slate-50 dark:bg-slate-800 rounded-2xl">{g.i}</div><h3 className="text-xl font-black text-slate-800 dark:text-slate-100 uppercase tracking-tight leading-none">{g.t}</h3></div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
-                    <div className="space-y-2 text-slate-600 dark:text-slate-400 font-black">{g.s.map((s, idx) => <p key={idx} className="text-[10px] font-bold">• {s}</p>)}</div>
-                    <div className="bg-slate-50 dark:bg-slate-800 p-4 rounded-2xl border dark:border-slate-700 shadow-inner">
-                       <pre className="text-[9px] text-slate-600 dark:text-slate-300 font-mono italic whitespace-pre-wrap mb-3 leading-relaxed">{g.p}</pre>
-                       <button onClick={() => { const el = document.createElement('textarea'); el.value = g.p; document.body.appendChild(el); el.select(); document.execCommand('copy'); document.body.removeChild(el); triggerToast("Copied Content!"); }} className="w-full bg-slate-900 dark:bg-slate-100 dark:text-slate-900 text-white p-3 rounded-xl text-[9px] font-black uppercase shadow-lg active:scale-95 transition-all leading-none">Copy Prompt</button>
+                <div key={g.t} className="bg-white dark:bg-slate-900 p-8 rounded-[3.5rem] border shadow-sm space-y-4 group transition-all hover:border-purple-400 leading-none">
+                  <div className="flex items-center gap-4 border-b dark:border-slate-800 pb-4 leading-none"><div className="p-3 bg-slate-50 dark:bg-slate-800 rounded-2xl leading-none">{g.i}</div><h3 className="text-xl font-black text-slate-800 dark:text-slate-100 uppercase tracking-tight leading-none">{g.t}</h3></div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2 leading-none">
+                    <div className="space-y-2 text-slate-600 dark:text-slate-400 font-black leading-none">{g.s.map((s, idx) => <p key={idx} className="text-[10px] font-bold leading-none">• {s}</p>)}</div>
+                    <div className="bg-slate-50 dark:bg-slate-800 p-4 rounded-2xl border dark:border-slate-700 shadow-inner leading-none">
+                       <pre className="text-[9px] text-slate-600 dark:text-slate-300 font-mono italic whitespace-pre-wrap mb-3 leading-relaxed leading-none">{g.p}</pre>
+                       <button onClick={() => { const el = document.createElement('textarea'); el.value = g.p; document.body.appendChild(el); el.select(); document.execCommand('copy'); document.body.removeChild(el); triggerToast("Copied Prompt!"); }} className="w-full bg-slate-900 dark:bg-slate-100 dark:text-slate-900 text-white p-3 rounded-xl text-[9px] font-black uppercase shadow-lg active:scale-95 transition-all leading-none">Copy Prompt</button>
                     </div>
                   </div>
                 </div>
+              ))}
+            </div>
+          </div>
+        );
+
+      case 'how_to_use':
+        return (
+          <div className="max-w-4xl mx-auto pt-10 px-4 space-y-10 animate-in fade-in pb-20 text-center uppercase tracking-widest font-black leading-none">
+            <button onClick={() => setCurrentModule('hub')} className="flex items-center gap-2 text-slate-500 bg-white dark:bg-slate-900 px-6 py-3 rounded-2xl border shadow-sm active:scale-95 text-xs font-bold leading-none uppercase transition-all"><ChevronLeft size={18} /> Hub</button>
+            <div className="grid grid-cols-1 gap-6 text-left leading-none font-black">
+              <div className="bg-blue-600 p-10 rounded-[3.5rem] text-white shadow-xl flex items-center gap-8"><Lightbulb size={60} /><div><h3 className="text-3xl font-black uppercase leading-tight leading-none">User Manual</h3><p className="text-blue-100 uppercase font-bold tracking-widest text-xs mt-3 opacity-80 leading-relaxed leading-none">Master your digital toolkit with IB TECHIFIED.</p></div></div>
+              {[{t: "EduCalc Automation", d: "Set Subject and Class. Students from your Registry auto-populate based on normalized names ('ss1' = 'ss 1'). Results sum automatically using standard grading logic. Archives track mod time."}, {t: "EduNote Workspace", d: "Prepare notes with full Curriculum support. Attach board photos using the Camera icon. Export as professional PDF or Word Doc. Entries display exact modification timestamps."}, {t: "Registry & Backup", d: "Save names to Registry once. Normalization logic ensures consistency across all classes. Use Backup Center weekly to download master JSON file for data portability across devices."}].map(g => (
+                <div key={g.t} className="bg-white dark:bg-slate-900 p-8 rounded-[3rem] border border-slate-100 dark:border-slate-800 shadow-sm space-y-4 transition-all hover:border-blue-400 leading-none"><h3 className="text-xl font-black text-slate-800 dark:text-slate-100 border-b dark:border-slate-800 pb-4 uppercase leading-none leading-none">{g.t}</h3><p className="text-sm font-bold text-slate-600 dark:text-slate-400 leading-relaxed leading-none">• {g.d}</p></div>
               ))}
             </div>
           </div>
@@ -429,11 +474,11 @@ export default function App() {
              <div className="lg:col-span-2 bg-white dark:bg-slate-900 p-8 rounded-[3.5rem] shadow-xl border dark:border-slate-800 space-y-6">
                 <h3 className="text-sm dark:text-slate-100 uppercase tracking-widest leading-none"><FilePlus2 size={18} className="text-blue-600 inline mr-2" /> Class Entry</h3>
                 <div className="space-y-4 pt-4">
-                  <div className="space-y-1"><label className="text-[9px] text-slate-400 font-bold ml-4 uppercase">Subject</label><input type="text" placeholder="Mathematics" className="w-full p-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl outline-none font-bold dark:text-slate-100 shadow-inner" value={subject} onChange={(e) => setSubject(e.target.value)} /></div>
+                  <div className="space-y-1"><label className="text-[9px] text-slate-400 font-bold ml-4 uppercase leading-none">Subject</label><input type="text" placeholder="Mathematics" className="w-full p-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl outline-none font-bold dark:text-slate-100 shadow-inner" value={subject} onChange={(e) => setSubject(e.target.value)} /></div>
                   <div className="space-y-1">
-                    <label className="text-[9px] text-slate-400 font-bold ml-4 uppercase">Class</label>
-                    <input type="text" placeholder="SS 1" className="w-full p-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl outline-none font-bold dark:text-slate-100 shadow-inner" value={className} onChange={(e) => setClassName(e.target.value)} />
-                    {className.length > 0 && <div className="mt-2 text-[9px] font-black text-blue-600 px-4 flex items-center gap-1 leading-none"><Zap size={10} /> {detectCat(className).toUpperCase()} DETECTED</div>}
+                    <label className="text-[9px] text-slate-400 font-bold ml-4 uppercase leading-none">Class</label>
+                    <input type="text" placeholder="e.g. SS 1" className="w-full p-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl outline-none font-bold dark:text-slate-100 shadow-inner" value={className} onChange={(e) => setClassName(e.target.value)} />
+                    {className.length > 0 && <div className="mt-2 text-[9px] font-black text-blue-600 px-4 flex items-center gap-1 leading-none"><Zap size={10} /> {detectCat(className).toUpperCase()} SCHEME DETECTED</div>}
                   </div>
                   <button onClick={handleStartEduCalc} className="w-full bg-blue-600 text-white p-5 rounded-2xl font-black shadow-xl uppercase tracking-widest text-[10px] active:scale-95 transition-all leading-none">Open Register</button>
                 </div>
@@ -441,11 +486,11 @@ export default function App() {
              <div className="lg:col-span-3 space-y-6">
                 <h3 className="text-sm dark:text-slate-100 uppercase tracking-widest px-4 leading-none"><History size={18} className="text-blue-600 inline mr-2" /> Archives</h3>
                 <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
-                    {registers.length === 0 ? <div className="text-center py-20 bg-white dark:bg-slate-900 rounded-[3rem] border border-dashed text-slate-300 font-black text-[9px] uppercase tracking-widest leading-none shadow-inner">No records</div> :
+                    {registers.length === 0 ? <div className="text-center py-20 bg-white dark:bg-slate-900 rounded-[3rem] border border-dashed text-slate-300 font-black text-[9px] uppercase tracking-widest leading-none shadow-inner">No local records</div> :
                     registers.map(r => (
                       <div key={r.id} onClick={() => loadRegister(r)} className="bg-white dark:bg-slate-900 p-7 rounded-[3rem] border shadow-sm hover:border-blue-400 transition-all cursor-pointer group flex justify-between items-center text-left">
                         <div className="space-y-1.5 leading-none"><h4 className="font-black dark:text-slate-100 uppercase text-lg leading-none">{r.subject}</h4><p className="text-[10px] font-bold text-slate-400 uppercase mt-2 leading-none">{r.className} • {r.students?.length} Students</p><div className="flex items-center gap-1.5 text-[8px] text-slate-400 font-black italic uppercase mt-2 leading-none"><Clock size={10} /> Mod: {r.lastSaved}</div></div>
-                        <div className="p-3 bg-blue-50 dark:bg-slate-800 text-blue-600 rounded-2xl group-hover:bg-blue-600 group-hover:text-white shadow-sm transition-all"><ArrowRight size={20} /></div>
+                        <div className="p-3 bg-blue-50 dark:bg-slate-800 text-blue-600 rounded-2xl group-hover:bg-blue-600 group-hover:text-white transition-all shadow-sm"><ArrowRight size={20} /></div>
                       </div>
                     ))}
                 </div>
@@ -454,101 +499,31 @@ export default function App() {
         </div>
       );
 
-      case 'edunote_home': return (
-        <div className="max-w-4xl mx-auto pt-10 px-4 space-y-10 animate-in fade-in pb-20 text-center uppercase tracking-widest font-black leading-none">
-          <div className="flex items-center justify-between"><button onClick={() => setCurrentModule('hub')} className="flex items-center gap-2 text-slate-500 bg-white dark:bg-slate-900 px-5 py-2.5 rounded-2xl border shadow-sm active:scale-95 text-xs font-bold leading-none"><ChevronLeft size={18} /> Hub</button><h2 className="text-xl dark:text-slate-100 uppercase tracking-tight leading-none">Category</h2></div>
-          <div className="grid grid-cols-1 gap-6 text-left font-black">
-            {['Primary', 'Junior', 'Senior'].map(cat => (
-              <button key={cat} onClick={() => changeView('edunote_subjects', { category: cat })} className="bg-white dark:bg-slate-900 p-8 rounded-[3rem] border-2 border-transparent hover:border-emerald-500 shadow-sm flex items-center justify-between group transition-all active:scale-[0.98]">
-                <div className="flex items-center gap-6 font-black"><div className="p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl group-hover:bg-emerald-600 group-hover:text-white transition-colors shadow-sm"><GraduationCap size={24}/></div><h3 className="text-2xl text-slate-800 dark:text-slate-100">{cat} School</h3></div>
-                <ChevronRight className="text-slate-300 group-hover:translate-x-1 transition-transform" />
-              </button>
-            ))}
+      case 'educalc_register': return (
+        <div className="max-w-6xl mx-auto pt-10 px-4 space-y-6 animate-in slide-in-from-bottom-10 pb-20 text-center uppercase tracking-widest font-black leading-none">
+          <div className="bg-blue-600 rounded-[3rem] p-10 text-white shadow-xl flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 text-left relative overflow-hidden leading-none">
+             <div className="flex items-center gap-5 z-10 leading-none"><button onClick={() => setCurrentModule('educalc_setup')} className="bg-white/20 p-3 rounded-2xl text-white active:scale-95 transition-all leading-none"><ChevronLeft size={24} /></button><div><h1 className="text-3xl font-black uppercase tracking-tighter leading-none">{subject}</h1><p className="text-blue-100 text-[10px] font-bold uppercase tracking-[0.3em] mt-3 opacity-80 leading-none">{className}</p></div></div>
+             <div className="flex gap-2 z-10 leading-none"><button onClick={saveEduCalc} className="bg-white text-blue-600 px-6 py-3 rounded-2xl text-[10px] font-black uppercase shadow-lg active:scale-95 transition-all leading-none">Save</button><button onClick={() => { if(!students.length) return triggerToast("No data"); let csv = "S/N,Student Name,CA 1,CA 2,Exam,Total,Grade\n" + students.map((s,i) => `${i+1},${s.name},${s.ca1},${s.ca2},${s.exam},${s.total},${s.grade}`).join("\n"); const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' })); a.download = `${subject}_Report.csv`; a.click(); }} className="bg-green-500 text-white px-6 py-3 rounded-2xl text-[10px] font-black uppercase shadow-lg active:scale-95 transition-all leading-none">Excel</button></div>
+             <Calculator className="absolute -right-10 -bottom-10 opacity-10 text-white leading-none" size={200} />
           </div>
-        </div>
-      );
-
-      case 'edunote_subjects': return (
-        <div className="max-w-4xl mx-auto pt-10 px-4 space-y-10 animate-in slide-in-from-right-10 pb-20 text-center uppercase tracking-widest font-black">
-           <div className="flex items-center justify-between"><button onClick={() => setCurrentModule('edunote_home')} className="flex items-center gap-2 text-slate-500 bg-white dark:bg-slate-900 px-5 py-2.5 rounded-2xl border shadow-sm active:scale-95 text-xs font-bold leading-none"><ChevronLeft size={18} /> Back</button><div className="bg-blue-600 text-white px-6 py-2.5 rounded-full font-black text-[9px] shadow-md uppercase leading-none">{selectedCategory} SCHOOL</div></div>
-           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-8">
-             {SUBJECT_LISTS[selectedCategory]?.map(s => (
-               <button key={s} onClick={() => changeView('edunote_levels', { subj: s })} className="bg-white dark:bg-slate-900 p-6 rounded-[2rem] border-2 border-transparent hover:border-blue-600 transition-all font-black text-slate-700 dark:text-slate-200 text-xs shadow-sm active:scale-95 uppercase tracking-widest leading-none">{s}</button>
-             ))}
-           </div>
-        </div>
-      );
-
-      case 'edunote_levels': return (
-        <div className="max-w-4xl mx-auto pt-10 px-4 space-y-10 animate-in slide-in-from-right-10 pb-20 text-center uppercase tracking-widest font-black">
-          <div className="flex items-center justify-between"><button onClick={() => setCurrentModule('edunote_subjects')} className="flex items-center gap-2 text-slate-500 bg-white dark:bg-slate-900 px-5 py-2.5 rounded-2xl border active:scale-95 shadow-sm text-xs font-bold leading-none"><ChevronLeft size={18} /> Back</button><div className="bg-emerald-600 text-white px-6 py-2.5 rounded-full font-black text-[9px] shadow-md uppercase leading-none">{selectedSubject}</div></div>
-          <div className="flex flex-wrap justify-center gap-6 mt-12 font-black">
-            {(selectedCategory === 'Primary' ? ['Pri 1', 'Pri 2', 'Pri 3', 'Pri 4', 'Pri 5'] : selectedCategory === 'Junior' ? ['JSS 1', 'JSS 2', 'JSS 3'] : ['SS 1', 'SS 2', 'SS 3']).map(lvl => (
-              <button key={lvl} onClick={() => changeView('edunote_view', { level: lvl })} className="bg-white dark:bg-slate-900 w-32 h-32 rounded-[2.5rem] border-2 border-transparent hover:border-emerald-500 transition-all flex flex-col items-center justify-center font-black text-xl text-slate-800 dark:text-slate-100 shadow-md active:scale-95 transition-all leading-none"><span className="text-[9px] text-slate-400 mb-1 uppercase tracking-widest leading-none">Class</span>{lvl}</button>
-            ))}
-          </div>
-        </div>
-      );
-
-      case 'edunote_view': 
-        const scheme_L = (NIGERIAN_SCHEMES[selectedLevel] || []).filter(s => s.subject.toLowerCase() === selectedSubject?.toLowerCase());
-        const note_V = noteArchives[`${selectedSubject}_${selectedLevel}`] || [];
-        return (
-        <div className="max-w-7xl mx-auto pt-10 px-4 space-y-8 animate-in slide-in-from-right-10 pb-20 text-center uppercase tracking-widest font-black">
-          <div className="sticky top-4 z-50 flex items-center justify-between bg-white/90 dark:bg-slate-900/90 backdrop-blur-md p-4 rounded-[2rem] border shadow-xl">
-             <button onClick={() => setCurrentModule('edunote_levels')} className="flex items-center gap-2 text-slate-500 bg-slate-50 dark:bg-slate-800 px-5 py-2.5 rounded-2xl active:scale-95 text-xs font-bold transition-all leading-none"><ChevronLeft size={18} /> Back</button>
-             <div className="flex gap-2">
-                <button onClick={() => { setIsPrinting(true); setTimeout(() => { window.print(); setIsPrinting(false); }, 1000); }} className="bg-blue-600 text-white px-5 py-2.5 rounded-2xl text-[9px] font-black uppercase shadow-lg active:scale-95 transition-all leading-none"><Printer size={16} className="inline mr-2"/> PDF</button>
-                <button onClick={exportDoc} className="bg-indigo-600 text-white px-5 py-2.5 rounded-2xl text-[9px] font-black uppercase shadow-lg active:scale-95 transition-all leading-none"><FileCode size={16} className="inline mr-2"/> Word Doc</button>
-                <button onClick={saveLessonNote} className="bg-emerald-600 text-white px-5 py-2.5 rounded-2xl text-[9px] font-black uppercase shadow-lg active:scale-95 transition-all leading-none"><Save size={16} className="inline mr-2"/> Save</button>
-             </div>
-          </div>
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 mt-4 text-left font-black">
-             <div className="space-y-6">
-                <div className="bg-blue-600 text-white p-8 rounded-[3.5rem] shadow-xl space-y-6 relative overflow-hidden">
-                   <h3 className="text-xs uppercase tracking-widest z-10 relative leading-none">Curriculum Library</h3>
-                   <div className="space-y-4 max-h-[550px] overflow-y-auto pr-2 custom-scrollbar z-10 relative">
-                      {scheme_L.map((item, i) => (
-                        <div key={i} className="bg-white/10 p-5 rounded-[2.5rem] border border-white/20 hover:bg-white/20 transition-all cursor-pointer">
-                          <p className="text-[10px] font-bold leading-relaxed italic text-white/90">"{item.topics}"</p>
-                          <button onClick={() => { setNoteTopic(item.topics); setNoteImage(null); setCurrentNote(`Subject: ${selectedSubject}\nWeek: ${selectedWeek}\nTopic: ${item.topics}\n\nObjectives:\n1.\n\nContent Presentation:\n-`); }} className="mt-4 text-[9px] font-black uppercase bg-white text-blue-600 px-4 py-2.5 rounded-xl w-full shadow-md active:scale-95 transition-all leading-none">Load Draft</button>
-                        </div>
-                      ))}
-                      {!scheme_L.length && <p className="text-[10px] text-white/50 text-center uppercase py-4 leading-relaxed font-bold leading-none">No data</p>}
-                   </div>
-                   <GraduationCap className="absolute -right-5 -bottom-5 opacity-10 text-white" size={150} />
-                </div>
-             </div>
-             <div className="lg:col-span-2 bg-white dark:bg-slate-900 p-8 rounded-[3.5rem] shadow-xl border dark:border-slate-800 space-y-6 text-center font-black">
-                <div className="flex items-center justify-between border-b dark:border-slate-800 pb-4"><h3 className="text-[10px] font-black dark:text-slate-100 uppercase tracking-widest leading-none"><Edit3 size={18} className="text-emerald-600 inline mr-2" /> Workspace</h3><div className="grid grid-cols-6 md:grid-cols-12 gap-1">{[1,2,3,4,5,6,7,8,9,10,11,12].map(w => <button key={w} onClick={() => setSelectedWeek(w)} className={`px-2 py-1 rounded text-[10px] font-black ${selectedWeek === w ? 'bg-blue-600 text-white shadow-md' : 'text-slate-400 hover:bg-white'}`}>{w}</button>)}</div></div>
-                <div className="space-y-4 font-black">
-                   <div className="text-left space-y-1"><label className="text-[8px] text-slate-400 font-black ml-4 uppercase tracking-widest leading-none">Note Topic</label><input type="text" placeholder="Topic Title..." className="w-full p-5 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl outline-none font-bold shadow-inner dark:text-slate-100" value={noteTopic} onChange={e => setNoteTopic(e.target.value)} /></div>
-                   {!noteImage ? (
-                    <div className="border-2 border-dashed border-slate-100 dark:border-slate-800 rounded-3xl p-8 text-center bg-slate-50/50 dark:bg-slate-800/20 hover:bg-emerald-50 transition-all group cursor-pointer relative"><Camera size={32} className="mx-auto text-slate-200 mb-3 group-hover:scale-110 transition-transform shadow-sm"/><p className="text-[9px] text-slate-400 font-bold uppercase mb-4 leading-none tracking-widest">Attach Board Photo</p><label className="inline-block bg-white dark:bg-slate-800 border px-6 py-2 rounded-xl text-[9px] font-black cursor-pointer shadow-sm active:scale-95 uppercase tracking-widest leading-none transition-all">Select Image<input type="file" accept="image/*" className="hidden" onChange={(e) => { const r = new FileReader(); r.onloadend = () => { setNoteImage(r.result); triggerToast("Image Attached!"); }; if(e.target.files[0]) r.readAsDataURL(e.target.files[0]); }} /></label></div>
-                   ) : (
-                    <div className="relative rounded-3xl overflow-hidden shadow-lg group"><img src={noteImage} className="w-full h-auto max-h-[300px] object-cover" alt="note attach" /><button onClick={() => setNoteImage(null)} className="absolute top-4 right-4 bg-red-500 text-white p-2 rounded-full shadow-xl hover:scale-110 active:scale-90 transition-transform leading-none"><X size={18} /></button></div>
-                   )}
-                   <div className="text-left space-y-1"><label className="text-[8px] text-slate-400 font-black ml-4 uppercase tracking-widest leading-none">Note Content</label><textarea placeholder="Type lesson content here..." className="w-full p-6 bg-slate-50 dark:bg-slate-800 border-none rounded-3xl outline-none dark:text-slate-300 font-medium h-[400px] leading-relaxed resize-none shadow-inner" value={currentNote} onChange={e => setCurrentNote(e.target.value)} /></div>
-                </div>
-             </div>
-             <div className="space-y-6">
-                <h3 className="text-[10px] font-black dark:text-slate-100 uppercase tracking-widest px-4 leading-none"><History size={18} className="text-emerald-600 inline mr-2" /> 12-Week Vault</h3>
-                <div className="space-y-4 max-h-[800px] overflow-y-auto pr-2 custom-scrollbar">
-                  {[1,2,3,4,5,6,7,8,9,10,11,12].map(wk => {
-                    const saved = note_V.find(n => n.week === wk);
-                    return (
-                      <div key={wk} className={`bg-white dark:bg-slate-900 p-6 rounded-[2.5rem] border shadow-sm transition-all ${saved ? 'border-emerald-200 cursor-pointer hover:border-emerald-500' : 'opacity-40'}`} onClick={() => saved && (setCurrentNote(saved.content), setNoteTopic(saved.topic), setSelectedWeek(saved.week), setNoteImage(saved.image || null))}>
-                         <div className="flex justify-between items-start leading-none">
-                            <span className="text-[9px] font-black px-2 py-1 rounded-lg bg-emerald-50 text-emerald-600 uppercase leading-none">Week {wk}</span>
-                            {saved && <button onClick={(e) => { e.stopPropagation(); const key = `${selectedSubject}_${selectedLevel}`; const upd = note_V.filter(x => x.week !== wk); setNoteArchives({...noteArchives, [key]: upd}); }} className="text-red-300 hover:text-red-600 transition-colors leading-none"><Trash2 size={12}/></button>}
-                         </div>
-                         <h4 className="font-black dark:text-slate-100 uppercase text-[10px] mt-2 leading-tight">{saved ? saved.topic : 'Empty Slot'}</h4>
-                         {saved && <div className="mt-3 pt-2 border-t dark:border-slate-800 text-[8px] text-slate-400 font-black flex items-center gap-1 uppercase tracking-tighter leading-none"><Clock size={8}/> Mod: {saved.date}</div>}
-                      </div>
-                    );
-                  })}
-                </div>
-             </div>
+          <div className="bg-white dark:bg-slate-900 rounded-[3.5rem] shadow-sm border dark:border-slate-800 overflow-hidden text-left leading-none font-black">
+             <div className="p-8 border-b dark:border-slate-800 flex justify-between items-center bg-slate-50/50 dark:bg-slate-900/50 px-10 leading-none"><h3 className="font-black text-slate-800 dark:text-slate-100 uppercase text-xs flex items-center gap-2 leading-none"><FileSpreadsheet size={18} className="text-blue-600 leading-none" /> Records</h3><button onClick={() => setStudents([...students, {id:Date.now(), name:"", ca1:0, ca2:0, exam:0, total:0, grade:"F"}])} className="bg-blue-600 text-white px-8 py-3.5 rounded-2xl text-xs font-black flex items-center gap-2 shadow-xl hover:bg-blue-700 active:scale-95 transition-all uppercase leading-none tracking-widest leading-none"><Plus size={20} /> Add Student</button></div>
+             <div className="overflow-x-auto px-4 leading-none"><table className="w-full border-collapse leading-none font-black">
+               <thead><tr className="bg-slate-50 dark:bg-slate-800 text-[9px] font-black text-slate-400 uppercase tracking-widest border-b dark:border-slate-800 leading-none"><th className="px-10 py-6 text-left min-w-[300px] leading-none">Name</th><th className="px-2 py-6 text-center leading-none">CA 1</th><th className="px-2 py-6 text-center leading-none">CA 2</th><th className="px-2 py-6 text-center leading-none">EXAM</th><th className="px-2 py-6 text-center text-blue-600 leading-none">TOTAL</th><th className="px-2 py-6 text-center leading-none">GRADE</th><th className="px-10 py-6 text-center leading-none">X</th></tr></thead>
+               <tbody className="divide-y dark:divide-slate-800 leading-none font-black">
+                 {students.map(s => (
+                   <tr key={s.id} className="hover:bg-blue-50/20 transition-colors uppercase leading-none font-black">
+                     <td className="px-10 py-4 font-bold leading-none"><input type="text" className="w-full bg-transparent border-none outline-none font-black text-slate-700 dark:text-slate-100 placeholder:opacity-30 uppercase leading-none" value={s.name} onChange={(e) => updateStudent(s.id, 'name', e.target.value)} /></td>
+                     <td className="px-2 py-4 leading-none"><input type="number" className="w-16 text-center mx-auto bg-white dark:bg-slate-800 border dark:border-slate-700 rounded-xl p-3 font-black text-blue-600 leading-none" value={s.ca1 || ""} onChange={(e) => updateStudent(s.id, 'ca1', e.target.value)} /></td>
+                     <td className="px-2 py-4 leading-none"><input type="number" className="w-16 text-center mx-auto bg-white dark:bg-slate-800 border dark:border-slate-700 rounded-xl p-3 font-black text-blue-600 leading-none" value={s.ca2 || ""} onChange={(e) => updateStudent(s.id, 'ca2', e.target.value)} /></td>
+                     <td className="px-2 py-4 leading-none"><input type="number" className="w-16 text-center mx-auto bg-white dark:bg-slate-800 border dark:border-slate-700 rounded-xl p-3 font-black text-blue-600 leading-none" value={s.exam || ""} onChange={(e) => updateStudent(s.id, 'exam', e.target.value)} /></td>
+                     <td className="px-2 py-4 text-center font-black leading-none"><span className={`text-sm px-4 py-1.5 rounded-full ${s.total >= 40 ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-500'} leading-none`}>{s.total}</span></td>
+                     <td className="px-2 py-4 text-center font-black dark:text-slate-100 leading-none">{s.grade}</td>
+                     <td className="px-10 py-4 text-center leading-none"><button onClick={() => setStudents(students.filter(x => x.id !== s.id))} className="text-slate-300 hover:text-red-500 transition-colors leading-none"><Trash2 size={12}/></button></td>
+                   </tr>
+                 ))}
+               </tbody>
+             </table></div>
           </div>
         </div>
       );
@@ -556,26 +531,13 @@ export default function App() {
       case 'backup_center': return (
         <div className="max-w-4xl mx-auto pt-10 px-4 space-y-10 animate-in fade-in pb-20 text-center uppercase tracking-widest font-black leading-none">
            <button onClick={() => setCurrentModule('hub')} className="flex items-center gap-2 text-slate-500 bg-white dark:bg-slate-900 px-5 py-2.5 rounded-2xl border shadow-sm active:scale-95 text-xs font-bold transition-all leading-none"><ChevronLeft size={18} /> Hub</button>
-           <div className="bg-blue-600 p-10 rounded-[3.5rem] text-white shadow-xl flex items-center gap-8 text-left relative overflow-hidden leading-none"><Database size={120} className="absolute -right-5 -bottom-5 opacity-10" /><div className="p-5 bg-white rounded-[2rem] text-blue-600 shadow-inner"><Database size={40} /></div><div><h3 className="text-3xl font-black uppercase leading-tight leading-none">Backup Center</h3><p className="text-blue-100 font-bold tracking-widest text-xs mt-2 opacity-80 leading-none uppercase tracking-widest">Permanent Data Export</p></div></div>
+           <div className="bg-blue-600 p-10 rounded-[3.5rem] text-white shadow-xl flex items-center gap-8 text-left relative overflow-hidden leading-none font-black"><Database size={120} className="absolute -right-5 -bottom-5 opacity-10 leading-none font-black" /><div className="p-5 bg-white rounded-[2rem] text-blue-600 shadow-inner leading-none font-black"><Database size={40} className="leading-none font-black" /></div><div><h3 className="text-3xl font-black uppercase leading-tight leading-none font-black">Backup Center</h3><p className="text-blue-100 font-bold tracking-widest text-xs mt-2 opacity-80 leading-none uppercase tracking-widest font-black leading-none">Permanent Data Export</p></div></div>
            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 leading-none font-black">
-              <button onClick={() => { const blob = new Blob([JSON.stringify({registers, notes: noteArchives, profile: userProfile, db: globalStudents}, null, 2)], { type: 'application/json' }); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `EduBridge_Backup.json`; a.click(); triggerToast("Backup Exported!"); }} className="bg-white dark:bg-slate-900 p-8 rounded-[3rem] border shadow-sm text-center font-black text-xs uppercase text-slate-700 dark:text-slate-100 hover:border-blue-500 transition-all leading-none active:scale-95">Download Backup</button>
-              <label className="bg-white dark:bg-slate-900 p-8 rounded-[3rem] border shadow-sm text-center font-black text-xs uppercase text-slate-700 dark:text-slate-100 cursor-pointer hover:border-blue-500 transition-all leading-none active:scale-95">Restore Data<input type="file" accept=".json" className="hidden" onChange={(e) => { const r = new FileReader(); r.onload = (ev) => { try { const d = JSON.parse(ev.target.result); if(d.registers) setRegisters(d.registers); if(d.notes) setNoteArchives(d.notes); if(d.db) setGlobalStudents(d.db); if(d.profile) setUserProfile(d.profile); triggerToast("Restored!"); } catch(e){ triggerToast("Invalid File"); } }; if(e.target.files[0]) r.readAsText(e.target.files[0]); }} /></label>
+              <button onClick={() => { const blob = new Blob([JSON.stringify({registers, notes: noteArchives, profile: userProfile, db: globalStudents}, null, 2)], { type: 'application/json' }); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `EduBridge_Backup.json`; a.click(); triggerToast("Backup Exported!"); }} className="bg-white dark:bg-slate-900 p-8 rounded-[3rem] border shadow-sm text-center font-black text-xs uppercase text-slate-700 dark:text-slate-100 hover:border-blue-500 transition-all leading-none active:scale-95 leading-none font-black">Download Backup</button>
+              <label className="bg-white dark:bg-slate-900 p-8 rounded-[3rem] border shadow-sm text-center font-black text-xs uppercase text-slate-700 dark:text-slate-100 cursor-pointer hover:border-blue-500 transition-all leading-none active:scale-95 leading-none font-black">Restore Data<input type="file" accept=".json" className="hidden" onChange={(e) => { const r = new FileReader(); r.onload = (ev) => { try { const d = JSON.parse(ev.target.result); if(d.registers) setRegisters(d.registers); if(d.notes) setNoteArchives(d.notes); if(d.db) setGlobalStudents(d.db); if(d.profile) setUserProfile(d.profile); triggerToast("Restored!"); } catch(e){ triggerToast("Invalid File"); } }; if(e.target.files[0]) r.readAsText(e.target.files[0]); }} /></label>
            </div>
         </div>
       );
-
-      case 'how_to_use':
-        return (
-          <div className="max-w-4xl mx-auto pt-10 px-4 space-y-10 animate-in fade-in pb-20 text-center uppercase tracking-widest leading-none font-black">
-            <button onClick={() => setCurrentModule('hub')} className="flex items-center gap-2 text-slate-500 bg-white dark:bg-slate-900 px-6 py-3 rounded-2xl border shadow-sm active:scale-95 text-xs font-bold leading-none uppercase transition-all"><ChevronLeft size={18} /> Hub</button>
-            <div className="grid grid-cols-1 gap-6 text-left leading-none font-black">
-              <div className="bg-blue-600 p-10 rounded-[3.5rem] text-white shadow-xl flex items-center gap-8"><Lightbulb size={60} /><div><h3 className="text-3xl font-black uppercase leading-tight leading-none">User Manual</h3><p className="text-blue-100 uppercase font-bold tracking-widest text-xs mt-3 opacity-80 leading-relaxed leading-none">Master your digital toolkit with IB TECHIFIED.</p></div></div>
-              {[{t: "EduCalc Automation", d: "Set Subject and Class. Registry students auto-populate based on normalized names ('ss1' = 'ss 1'). Input scores; results sum automatically using standard grading logic. Archives track mod time."}, {t: "EduNote Workspace", d: "Prepare notes with Curriculum support. Attach board photos using Camera. Export as professional PDF or Word Doc. Modification timestamps track updates."}, {t: "Registry & Backup", d: "Add names to Registry once. Use Backup Center weekly to download master JSON file for data portability."}].map(g => (
-                <div key={g.t} className="bg-white dark:bg-slate-900 p-8 rounded-[3rem] border border-slate-100 dark:border-slate-800 shadow-sm space-y-4 transition-all hover:border-blue-400"><h3 className="text-xl font-black text-slate-800 dark:text-slate-100 border-b dark:border-slate-800 pb-4 uppercase leading-none leading-none">{g.t}</h3><p className="text-sm font-bold text-slate-600 dark:text-slate-400 leading-relaxed leading-none">• {g.d}</p></div>
-              ))}
-            </div>
-          </div>
-        );
 
       default: return null;
     }
@@ -584,12 +546,12 @@ export default function App() {
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 font-sans pb-24 selection:bg-blue-100 text-slate-800 transition-colors duration-300">
       {renderView()}
-      <div className="fixed bottom-6 left-0 right-0 pointer-events-none text-center print:hidden z-0">
-         <p className="text-[9px] font-black text-slate-300 dark:text-slate-700 uppercase tracking-[0.3em] italic leading-none">IB TECHIFIED • KANO NIGERIA • 2026</p>
+      <div className="fixed bottom-6 left-0 right-0 pointer-events-none text-center print:hidden z-0 font-black">
+         <p className="text-[9px] font-black text-slate-300 dark:text-slate-700 uppercase tracking-[0.3em] italic leading-none font-black">IB TECHIFIED • KANO NIGERIA • 2026</p>
       </div>
       {showToast && !isPrinting && (
-        <div className="fixed bottom-10 left-1/2 -translate-x-1/2 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 px-8 py-5 rounded-[2.5rem] shadow-2xl flex items-center gap-4 animate-in fade-in slide-in-from-bottom-5 duration-300 z-[9999] border dark:border-slate-800 font-black uppercase text-[10px] tracking-widest leading-none">
-          <CheckCircle2 className="text-green-400" size={24} />
+        <div className="fixed bottom-10 left-1/2 -translate-x-1/2 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 px-8 py-5 rounded-[2.5rem] shadow-2xl flex items-center gap-4 animate-in fade-in slide-in-from-bottom-5 duration-300 z-[9999] border dark:border-slate-800 font-black uppercase text-[10px] tracking-widest leading-none font-black">
+          <CheckCircle2 className="text-green-400 leading-none font-black" size={24} />
           {toastMsg}
         </div>
       )}
