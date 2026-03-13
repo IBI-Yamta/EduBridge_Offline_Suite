@@ -1,5 +1,6 @@
 EduBridge Offline Suite
 
+Begin here [https://edubridgesuites.bolt.host](https://edubridgesuites.bolt.host)
 Empowering Nigerian Educators through high-performance digital infrastructure. EduBridge Offline Suite is a centralized, offline-first workspace designed to automate grading, structure lesson planning, and provide essential digital literacy training for teachers.
 
 Developed by Ibrahim Isah Yamta. 3MTT Fellow. FE/23/86231210 (Kano, Nigeria).
@@ -90,12 +91,12 @@ npm start
 
 Direct technical assistance integrated via Call, SMS, WhatsApp, and Email.
 
-Developer: Ibrahim Isah Yamta (IB TECHIFIED). 3MTT Fello. FE/23/86231210
+Developer: Ibrahim Isah Yamta (IB TECHIFIED). 3MTT Fellow. FE/23/86231210
 
 Location: Kano, Nigeria
 
-Contact: +234 703 038 554
+Contact: +234 703 0385 554
 
-Email: ib.techified.consults.africa@gmail.com
+Email: iiyamta43@gmail.com
 
-© 2026 IB TECHIFIED. Empowering the 21st-Century Nigerian Teacher.
+© 2026 FE/23/86231210 (IB TECHIFIED). Empowering the 21st-Century Nigerian Teacher.
