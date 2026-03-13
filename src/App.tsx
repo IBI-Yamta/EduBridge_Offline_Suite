@@ -16,17 +16,12 @@ import {
  * ==============================================================================================
  * EDUBRIDGE OFFLINE SUITE - ULTIMATE MASTER EXCELLENCE EDITION
  * ==============================================================================================
- * Developed by: IB TECHIFIED
+ * Developed by: IBRAHIM ISAH YAMTA (IB TECHIFIED) 3MTT FELLOW. FE/23/86231210. 
  * Support Email: ib.techified.consults.africa@gmail.com
- * Merge logic: 
- * 1. FULL DATA RESTORE: All Curriculum, Support, and Manual content restored.
- * 2. EXPORT FIX: PDF and Word Doc now explicitly include attached images and text.
- * 3. EDUCALC STABILITY: Resolved crash caused by function naming mismatch in setup.
- * 4. NORMALIZATION: "ss 1" and "ss1" link to the same database records.
  * ==============================================================================================
  */
 
-// --- DATA: COMPREHENSIVE NIGERIAN NATIONAL CURRICULUM (FULL RESTORED) ---
+// --- DATA: COMPREHENSIVE NIGERIAN NATIONAL CURRICULUM (100% RESTORED) ---
 const NIGERIAN_SCHEMES = {
   'Pri 1': [
     { subject: 'Mathematics', topics: 'Numbers 1-100: Comprehensive identification, sequential counting, and proper writing techniques using number lines. Simple addition operations of single digits within the 1-20 range using concrete objects. Simple subtraction operations through practical take-away activities. Identification and properties of 2D shapes: Circle, Square, Triangle, and Rectangle. Basic concept of length: Differentiating between Long and Short through classroom measurements. Basic concept of mass: Differentiating between Heavy and Light objects. Concept of Capacity: Full and Empty.' },
@@ -49,39 +44,53 @@ const NIGERIAN_SCHEMES = {
   'Pri 4': [
     { subject: 'Mathematics', topics: 'Decimals and Percentages: Fundamental conversions and simple classroom calculations. Area of Plane Shapes: Formulas and calculations for the area of Rectangles and Squares. Volume: Understanding the space occupied by Cubes and Cuboids. Data handling: Construction of frequency tables, Bar charts, and the calculation of Mean and Mode for simple data sets. Roman Numerals: Mastery up to 100. Introduction to simple Angles (Right, Acute, Obtuse).' },
     { subject: 'English', topics: 'Adverbs and Conjunctions: Using parts of speech to link complex ideas and describe actions in sentences. Direct and Indirect Speech: Basic rules of transformation. Formal letter writing: Format for official applications, petitions, and requests. Creative writing: Techniques for developing an engaging plot and relatable characters. Use of Prefixes and Suffixes to expand vocabulary. Word registers: Specialized vocabulary for school, hospital, marketplace, and travel.' },
-    { subject: 'Basic Science', topics: 'The Human Skeletal System: Detailed classification of bones and major joints in the body and their functions. Blood Circulation: Comprehensive introduction to the Heart, Blood vessels, and the flow of blood. Simple machines: Levers, Pulleys. States of matter: Solids, Liquids, Gases.' },
-    { subject: 'Social Studies', topics: 'Government: Definition and arms. Natural Resources identification and location in Nigeria. Citizenship and National identity. Introduction to Democracy.' }
+    { subject: 'Basic Science', topics: 'The Human Skeletal System: Detailed classification of bones and major joints in the body and their functions. Blood Circulation: Comprehensive introduction to the Heart, Blood vessels, and the flow of blood. Simple Machines: Mechanics of Levers, Pulleys, and Inclined planes. Ecosystems: Understanding the interdependence of living things in local habitats. States of matter: Investigating the properties of Solids, Liquids, and Gases through experiments.' },
+    { subject: 'Social Studies', topics: 'Government: Definition, the three levels (Local, State, Federal), and the three arms of government (Executive, Legislative, Judicial). Rule of Law and social justice in the Nigerian context. Natural Resources: Identification, types, and geographic location across Nigeria. Citizenship and National Identity: Deep dive into national symbols (Flag, Coat of Arms) and their historical meanings. Introduction to the concept of Democracy.' }
   ],
   'Pri 5': [
-    { subject: 'Mathematics', topics: 'Ratio and Proportion. Introduction to Algebra. Geometry: Circumference and Area of a Circle. Speed, Distance, and Time. Roman Numerals up to 1000.' },
-    { subject: 'English', topics: 'Prepositions and Interjections. Idioms and Proverbs. Argumentative Essays. Active and Passive voice. Vocabulary building.' },
-    { subject: 'Basic Science', topics: 'Digestive System. Reproduction in Plants. Magnetism and Electricity. Environmental Pollution Control.' }
+    { subject: 'Mathematics', topics: 'Ratio and Proportion: Calculation and real-life economic applications. Introduction to Algebra: Solving open sentences and simple linear equations. Geometry: Understanding the Circumference and Area of a Circle. Speed, Distance, and Time: Fundamental physics-based calculations. Working with Roman Numerals up to 1000. Temperature: Reading and interpreting the Celsius and Fahrenheit scales. Binary numbers: Addition and subtraction in base 2.' },
+    { subject: 'English', topics: 'Prepositions and Interjections: Enhancing sentence structure and emotional depth. Idioms and Proverbs: Understanding and using cultural expressions. Advanced Comprehension and Summary skills: Techniques for condensing information without losing meaning. Argumentative Essays: Researching and developing logical points for debate. Active and Passive voice: Usage in formal and informal writing. Vocabulary: Systematic word building using greek and latin roots.' },
+    { subject: 'Basic Science', topics: 'The Human Digestive System: Organs involved and the biological process of digestion. Reproduction in Plants: Detailed study of pollination, fertilization, and seed dispersal. Magnetism and Electricity basics: Properties of magnets and simple circuit construction. Environmental Pollution Control: Modern methods of waste management and recycling. Basic Technology: Identification and use of Woodwork and Metalwork tools and safety precautions.' },
+    { subject: 'Social Studies', topics: 'Inter-ethnic relationships in Nigeria: Historical perspectives on promoting unity in diversity. National symbols: Protocols for respecting the Flag and the National Anthem. Drug abuse education: Scientific prevention and the social consequences of abuse. Global warming: Causes, effects, and environmental protection strategies. State Government: Detailed functions and executive responsibilities of the Governor and State Assembly.' }
   ],
   'JSS 1': [
-    { subject: 'Mathematics', topics: 'Number Bases (Denary conversions). LCM and HCF. Fractions, Decimals, and Percentages. Basic Algebra. Geometry: Construction of angles. Statistics: Average and Range.' },
-    { subject: 'English', topics: 'Parts of Speech intensive. Sentence Structure. Narrative and Descriptive essay writing. Literature genres. Drama, Prose, and Poetry.' }
+    { subject: 'Mathematics', topics: 'Number Bases: Mastery of Binary (Base 2) and Denary (Base 10) conversions. LCM and HCF: Advanced applications in complex problem solving. Fractions, Decimals, and Percentages: Comparisons, ordering, and arithmetic operations. Basic Algebra: Simplification of algebraic expressions and variable substitution. Geometry: Precise construction of angles and triangles using a pair of compasses and ruler. Statistics: Concept of Average and Range.' },
+    { subject: 'English', topics: 'Parts of Speech intensive: Mastery of Nouns, Verbs, Pronouns, Adverbs, and Adjectives in context. Sentence Structure: Detailed analysis of Subject, Predicate, and Object. Active and Passive voice introduction. Narrative and Descriptive essay writing: Focus on vivid imagery and flow. Literature: Detailed introduction to the three genres—Drama, Prose, and Poetry. Figures of speech: Simile and Metaphor.' },
+    { subject: 'Basic Science', topics: 'Matter: Exploration of States, Properties, and the difference between Physical and Chemical changes. Living things: Systematic classification and characteristics of major biological kingdoms. Family Health: Comprehensive study of Puberty, Personal hygiene, and reproductive health education. Force, Energy, and Power: Definitions, units, and fundamental physics calculations. Basic tech: Tools for measurement.' },
+    { subject: 'Computer Science', topics: 'History of Computing: Evolution from the Abacus to the 5th generation of modern computers. Generations of Computers: Distinguishing features. Basic Hardware Components: Detailed study of Input, Output, and Processing units. Basic keyboard skills and a professional introduction to word processing. Data and Information: Understanding the differences and the processing cycle. Computer Ethics.' }
   ],
   'JSS 2': [
-    { subject: 'Mathematics', topics: 'Linear Equations and Inequalities. Pythagorean Theorem. Area and Volume: Cylinders and Prisms. Probability.' },
-    { subject: 'English', topics: 'Figures of Speech. Tenses: Perfect and Continuous forms. Clauses and Phrases. Summary writing techniques.' }
+    { subject: 'Mathematics', topics: 'Linear Equations and Inequalities: Solving and graphing on a number line. Pythagorean Theorem: Applications in solving for missing sides of right-angled triangles. Area and Volume: Calculating the surface area and volume of Cylinders and Prisms. Probability: Calculating theoretical outcomes for simple random events. Statistics: Practical data collection, Frequency distribution tables, and the construction of Pie charts. Directed Numbers.' },
+    { subject: 'English', topics: 'Figures of Speech: Advanced Simile, Metaphor, and Personification in literature. Tenses: Mastering Perfect and Continuous forms for professional writing. Clauses and Phrases: Identification, types, and usage in complex sentences. Summary writing techniques: How to eliminate irrelevant details. Drama analysis: Elements of a play, characterization, and stagecraft terminology. Oral English: Vowels and Consonants.' },
+    { subject: 'Basic Science', topics: 'Kinetic Theory of Matter: Explaining molecular behavior in different states. Thermal Energy: Investigating the mechanisms of Conduction, Convection, and Radiation. The Human Brain and Nervous System: Detailed anatomy and coordination. Ecology: Detailed study of food chains, food webs, and the flow of energy through different trophic levels. Environmental Pollution: Causes and scientific mitigation. Chemicals in society.' },
+    { subject: 'Computer Science', topics: 'System Software vs Application Software: Definitions, functions, and key differences. Operating Systems: Detailed functions and examples (Windows, Android, iOS). Word Processing: Professional formatting and document editing techniques in Microsoft Word. Storage devices: Understanding the hierarchy of Primary and Secondary storage units and capacities. Logic Circuits: Simple AND/OR gates.' }
   ],
   'JSS 3': [
-    { subject: 'Mathematics', topics: 'Quadratic Equations. Simultaneous Equations. Trigonometry. Compound Interest. Variations.' },
-    { subject: 'English', topics: 'Complex Sentence Structures. Argumentative writing and Debating skills. Novel review.' }
+    { subject: 'Mathematics', topics: 'Quadratic Equations: Factorization method and introduction to quadratic graphs. Simultaneous Equations: Mastery of Substitution and Elimination methods. Trigonometry: Real-world applications of SOH CAH TOA. Compound Interest and Depreciation: Mathematical models for finance. Geometry: Calculating the sum of interior and exterior angles in various Polygons. Variations: Direct, Inverse, and Joint variations. Area of sectors.' },
+    { subject: 'English', topics: 'Complex Sentence Structures: Using Coordination and Subordination effectively. Argumentative writing and Debating skills: Rhetorical strategies. Novel review and literary analysis: Deep dive into set texts. Preparations for Junior WAEC/BECE: Past question drills. Word register: Exploring vocabulary specific to commerce, industry, and modern technology. Formal vs Informal registers.' },
+    { subject: 'Basic Science', topics: 'Radioactivity: Understanding Natural and Artificial sources of nuclear energy. Space Travel: History and the physics of Satellite technology. Drug abuse: Scientific effects on the human central nervous system. Genetic variation and heredity: Introduction to DNA and traits. Ethics in Science: The social and environmental responsibility of modern scientists. Metabolism in the human body.' },
+    { subject: 'Computer Science', topics: 'The Internet and World Wide Web (WWW): Protocols and navigation. Search Engines: Advanced techniques for effective academic research. Basic HTML: Building simple webpages using tags. Computer Ethics and Cybersecurity: Strategies for protecting digital data. Spreadsheet introduction: Microsoft Excel basics, formulas, and data visualization. Graphic packages intro.' }
   ],
   'SS 1': [
-    { subject: 'Mathematics', topics: 'Indices and Logarithms. Sets and Venn Diagrams. Quadratic Equations. Modular Arithmetic. Geometry Theorems.' },
-    { subject: 'English', topics: 'Lexis and Structure. Word Registers. Narrative and Descriptive Essays. Phonetics.' },
-    { subject: 'Physics', topics: 'Measurements and Units. Motion: Speed, Velocity, Acceleration. Work, Energy, and Power. Fluid at rest.' }
+    { subject: 'Mathematics', topics: 'Indices and Logarithms: Mastery of laws and complex applications. Sets and Venn Diagrams: Operations, cardinality, and solving 3-set problems. Quadratic Equations: Mastery of the Formula method and Completing the Square. Modular Arithmetic. Geometry Theorems: Detailed proofs for Triangles and Circles. Coordinate Geometry: Distance formula and midpoint. Surds: Addition, subtraction, and rationalization.' },
+    { subject: 'English', topics: 'Lexis and Structure: Advanced grammar and sophisticated vocabulary development. Word Registers: In-depth study of Legal, Medical, and Technical terminology. Narrative and Descriptive Essays: Using stylistic devices and tone. Phonetics: Detailed study of Pure Vowels and Diphthongs. Consonant clusters, word stress, and intonation patterns for public speaking. Comprehension: Drawing inferences.' },
+    { subject: 'Biology', topics: 'Cell structure and functions: Comparison of plant and animal cells. Classification of Living organisms: Detailed study of Kingdoms and Phyla. Nutrition: Chemical process of Photosynthesis and the Human Digestive system. Respiration: Aerobic and Anaerobic processes at the cellular level. Basic Ecology: Study of Biomes, energy flow, and local ecosystems. Support and movement in organisms.' },
+    { subject: 'Physics', topics: 'Measurements and Units: Distinction between Scalar and Vector quantities. Motion: In-depth Speed, Velocity, and Acceleration calculations. Work, Energy, and Power: Forms of energy and the law of conservation. Heat Energy: Accurate temperature measurement and the study of Thermal expansion in solids and liquids. Fluid at rest: Pressure, Archimedes principle, and Upthrust.' },
+    { subject: 'Chemistry', topics: 'Nature of Matter: The particulate nature of matter. Atoms, Molecules, and Ions: Fundamental building blocks. Chemical Symbols, Formulas, and Valency: Writing and balancing equations. Separating techniques: Distillation, Chromatography, and Fractional Crystallization. Kinetic theory of matter and Gas Laws (Boyle’s, Charles’s, and Avogadro’s). Structure of the Atom.' }
   ],
   'SS 2': [
-    { subject: 'Mathematics', topics: 'Trigonometry: Sine and Cosine Rules. Sequences and Series (AP/GP). Circle Geometry proofs. Statistics.' },
-    { subject: 'English', topics: 'Expository Essays. Complex Clauses. Judiciary and Government Register. Speech writing.' },
-    { subject: 'Biology', topics: 'Excretion and Osmoregulation. Nervous Coordination. Reproductive System. Plant transport.' }
+    { subject: 'Mathematics', topics: 'Trigonometry: Mastery of Sine and Cosine Rules for non-right triangles. Sequences and Series: Advanced Arithmetic and Geometric Progressions (AP/GP). Circle Geometry: In-depth proofs for Chord and Tangent theorems. Statistics: Calculation of Mean Deviation, Variance, and Standard Deviation. Linear inequalities in two variables. Logic: Statements, connectives, and truth tables.' },
+    { subject: 'English', topics: 'Expository Essays: Developing structure, clarity, and authority. Complex Clauses: Advanced Noun, Adjectival, and Adverbial clauses. Advanced Register of Judiciary and Government. Speech writing: Techniques for Formal and Informal occasions. Phonetics: Mastery of Consonant sounds and complex intonation patterns for effective communication. Summary: Drafting techniques for long reports.' },
+    { subject: 'Biology', topics: 'Excretion and Osmoregulation: Biological mechanisms in humans and plants. Nervous and Hormonal Coordination: Detailed study of the Brain, Spinal cord, and Endocrine glands. Reproductive System: Anatomy and physiology in Animals and Plants. Plant transport and skeletal support systems. Adaptation, Selection, and Evolution basics. Regulation of internal environment.' },
+    { subject: 'Physics', topics: 'Light Waves: reflection and Refraction through mirrors and lenses. Sound Waves: Characteristics, applications, and ultrasound. Electric Field: In-depth Current, Resistance, and Ohm’s Law. Gas Laws: The Universal gas equation and kinetic molecular theory. Gravitational fields: Newton’s law of universal gravitation. Wave-Particle paradox introduction.' },
+    { subject: 'Chemistry', topics: 'Periodic Table: Systematic study of groupings and periodic trends. Chemical Bonding: Detailed Ionic, Covalent, and Metallic bonding. Oxidation and Reduction (REDOX) reactions. Electrolysis: Principles and Faraday’s laws of electrolysis. Carbon and its Compounds: Organic chemistry introduction. Energetics, Entropy, and Chemical Equilibrium. Nitrogen compounds.' }
   ],
   'SS 3': [
-    { subject: 'Mathematics', topics: 'Calculus: Differentiation and Integration. Matrices and Determinants. Vector Analysis. Longitude and Latitude.' },
-    { subject: 'English', topics: 'WAEC/NECO Exam Prep. Formal Letters. Oral English: Rhythm and Stress. Summary Skills.' }
+    { subject: 'Mathematics', topics: 'Calculus: Fundamental Differentiation and Integration basics. Matrices and Determinants: Operations and Cramer’s rule. Vector Analysis in 2D space. Longitude and Latitude: Calculating great circle distances on Earth. Number bases review and conversion. Practical Statistics: Advanced work with large data sets and probability distributions for final exams. Financial math: Annuities and Amortization.' },
+    { subject: 'English', topics: 'WAEC/NECO Examination Prep: Intensive analysis of past questions and marking schemes. Formal Letters and Job Applications: Professional correspondence. Oral English: Stress, Rhythm, and Intonation patterns for effective communication. Summary Skills: Extracting and rephrasing main points from dense texts. Word register of Science, Technology, and Media. Creative composition for final exams.' },
+    { subject: 'Biology', topics: 'Genetics and Heredity: Mendelian laws, monohybrid/dihybrid crosses, and sex-linked traits. Evolution and Variation: Theories of evolution. Ecology: Detailed Population Dynamics, Succession, and Environmental Conservation. Nervous system review: Sensory organs and complex reflex actions. Biology of survival in harsh environments.' },
+    { subject: 'Physics', topics: 'Atomic Physics: Radioactivity and X-rays. Electronics: Diodes and Logic Gates. Magnetic Fields: Force calculation on moving charges. Electromagnetic Induction: Transformers, Motors, and Generators. Alternating current (AC) circuits: Reactance and Impedance. Quantum mechanics basics.' },
+    { subject: 'Chemistry', topics: 'Organic Chemistry: Detailed study of Hydrocarbons, Alcohols, and Organic Acids. Qualitative Analysis: Identification of salts and gases in lab environments. Chemical Equilibrium: Applying Le Chatelier’s principle. Fats and Oils: Saponification. Nuclear chemistry: Fission, Fusion, and applications. Chemistry in industry: Plastics and Soaps.' }
   ]
 };
 
@@ -91,12 +100,12 @@ const SUBJECT_LISTS = {
   'Senior': ['Mathematics', 'English', 'Biology', 'Chemistry', 'Physics', 'Civic Education', 'Economics', 'Government', 'Agriculture', 'Literature', 'Islamic Studies', 'Commerce']
 };
 
-// --- HELPERS ---
-const norm = (s) => s ? s.trim().toLowerCase().replace(/\s+/g, '') : "";
+// --- HELPER LOGIC ---
+const normS = (s) => s ? s.trim().toLowerCase().replace(/\s+/g, '') : "";
 
 const detectCategory = (className) => {
-  if (!className) return "Senior"; // Safe default
-  const n = norm(className);
+  if (!className) return "Senior";
+  const n = normS(className);
   if (n.startsWith('pri') || n.startsWith('grade')) return 'Primary';
   if (n.startsWith('jss')) return 'Junior';
   if (n.startsWith('ss')) return 'Senior';
@@ -104,7 +113,7 @@ const detectCategory = (className) => {
 };
 
 export default function App() {
-  // --- AUTH STATE ---
+  // --- AUTH & SETUP STATE ---
   const [userProfile, setUserProfile] = useState(null);
   const [isLocked, setIsLocked] = useState(true);
   const [setupName, setSetupName] = useState("");
@@ -114,7 +123,7 @@ export default function App() {
   // --- TOP LEVEL NAVIGATION ---
   const [currentModule, setCurrentModule] = useState('hub');
   
-  // --- STUDENT REGISTRY ---
+  // --- STUDENT DATABASE STATE ---
   const [globalStudents, setGlobalStudents] = useState([]);
   const [dbSearch, setDbSearch] = useState("");
 
@@ -124,8 +133,6 @@ export default function App() {
   const [subject, setSubject] = useState("");
   const [className, setClassName] = useState("");
   const [registers, setRegisters] = useState([]);
-
-  // --- EDUNOTE STATE ---
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [selectedLevel, setSelectedLevel] = useState(null); 
@@ -140,7 +147,7 @@ export default function App() {
   const [toastMsg, setToastMsg] = useState("");
   const [isPrinting, setIsPrinting] = useState(false);
 
-  // --- NAVIGATION (BACK BUTTON STABILITY) ---
+  // --- STABLE NAVIGATION LOGIC ---
   const changeView = (module, data = {}) => {
     setCurrentModule(module);
     if (data.category !== undefined) setSelectedCategory(data.category);
@@ -150,12 +157,9 @@ export default function App() {
     if (data.students !== undefined) setStudents(data.students);
     if (data.subject !== undefined) setSubject(data.subject);
     if (data.className !== undefined) setClassName(data.className);
+    
+    // Ensure back button support
     window.history.pushState({ module, ...data }, "");
-  };
-
-  const goBack = () => {
-    if (window.history.length > 1) window.history.back();
-    else setCurrentModule('hub');
   };
 
   useEffect(() => {
@@ -171,18 +175,20 @@ export default function App() {
         setStudents(s.students || []);
         setSubject(s.subject || "");
         setClassName(s.className || "");
-      } else setCurrentModule('hub');
+      } else {
+        setCurrentModule('hub');
+      }
     };
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
-  // --- STORAGE ---
+  // --- PERSISTENCE ---
   useEffect(() => {
     try {
       const r = localStorage.getItem('eb_regs_vfinal');
       const n = localStorage.getItem('eb_notes_vfinal');
-      const p = localStorage.getItem('eb_profile_vfinal');
+      const p = localStorage.getItem('eb_user_profile');
       const d = localStorage.getItem('eb_db_vfinal');
       if (r) setRegisters(JSON.parse(r));
       if (n) setNoteArchives(JSON.parse(n));
@@ -195,7 +201,7 @@ export default function App() {
     localStorage.setItem('eb_regs_vfinal', JSON.stringify(registers));
     localStorage.setItem('eb_notes_vfinal', JSON.stringify(noteArchives));
     localStorage.setItem('eb_db_vfinal', JSON.stringify(globalStudents));
-    if (userProfile) localStorage.setItem('eb_profile_vfinal', JSON.stringify(userProfile));
+    if (userProfile) localStorage.setItem('eb_user_profile', JSON.stringify(userProfile));
   }, [registers, noteArchives, userProfile, globalStudents]);
 
   const triggerToast = (msg) => {
@@ -203,7 +209,7 @@ export default function App() {
     setTimeout(() => setShowToast(false), 3000);
   };
 
-  // --- APP ACTIONS ---
+  // --- LOGIC ---
   const handleSetup = () => {
     if (!setupName || !setupPass) return triggerToast("Fill all fields");
     setUserProfile({ name: setupName, password: setupPass, created: new Date().toLocaleDateString() });
@@ -217,12 +223,13 @@ export default function App() {
 
   const handleStartEduCalc = () => {
     if (!subject || !className) return triggerToast("Fill missing fields.");
-    const existing = registers.find(r => norm(r.subject) === norm(subject) && norm(r.className) === norm(className));
+    const existing = registers.find(r => normS(r.subject) === normS(subject) && normS(r.className) === normS(className));
     if (existing) {
-      loadRegister(existing);
+      setCalcId(existing.id); setStudents(existing.students || []); setSubject(existing.subject); setClassName(existing.className);
+      setCurrentModule('educalc_register');
     } else { 
       const matching = globalStudents
-        .filter(gs => norm(gs.className) === norm(className))
+        .filter(gs => normS(gs.className) === normS(className))
         .map(gs => ({ id: gs.id, name: gs.name, ca1:0, ca2:0, exam:0, total:0, grade:"F" }));
       if(matching.length > 0) triggerToast(`Imported ${matching.length} Students`);
       setStudents(matching);
@@ -233,16 +240,11 @@ export default function App() {
 
   const saveEduCalc = () => {
     if (!subject || !className) return triggerToast("Data missing");
-    const id = calcId || Date.now();
     const ts = new Date().toLocaleString([], { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
+    const id = calcId || Date.now();
     setRegisters([{ id, subject, className, students, lastSaved: ts }, ...registers.filter(r => r.id !== id)]);
     setCalcId(id);
     triggerToast("Record Saved!");
-  };
-
-  const loadRegister = (record) => {
-    setCalcId(record.id); setStudents(record.students || []); setSubject(record.subject); setClassName(record.className);
-    setCurrentModule('educalc_register');
   };
 
   const updateStudent = (id, field, value) => {
@@ -266,7 +268,7 @@ export default function App() {
     const newNote = { week: selectedWeek, topic: noteTopic, content: currentNote, image: noteImage, date: ts };
     const updated = (noteArchives[key] || []).filter(n => n.week !== selectedWeek);
     setNoteArchives({ ...noteArchives, [key]: [newNote, ...updated] });
-    triggerToast(`Week ${selectedWeek} Vaulted!`);
+    triggerToast(`Week ${selectedWeek} Saved!`);
   };
 
   const exportDoc = () => {
@@ -284,7 +286,7 @@ export default function App() {
     triggerToast("Added to Registry");
   };
 
-  // --- RENDER VIEWS ---
+  // --- RENDER ---
   const renderView = () => {
     if (!userProfile) return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950 p-6 text-center animate-in zoom-in-95">
@@ -312,34 +314,34 @@ export default function App() {
     );
 
     if (isPrinting) return (
-      <div className="bg-white text-black p-10 min-h-screen font-sans">
-        <div className="text-center border-b-2 border-black pb-4 mb-6">
-          <h1 className="text-3xl font-bold tracking-[0.2em]">EDUBRIDGE</h1>
+      <div className="bg-white text-black p-10 min-h-screen font-sans border border-black m-4">
+        <div className="text-center border-b-2 border-black pb-4 mb-8">
+          <h1 className="text-4xl font-bold tracking-[0.2em] uppercase">EDUBRIDGE</h1>
         </div>
         
-        <div className="grid grid-cols-2 gap-y-2 mb-8 text-sm font-bold uppercase border-b-2 border-slate-100 pb-4">
-           <div className="text-slate-600">Teacher: <span className="text-black">{userProfile.name}</span></div>
-           <div className="text-right text-slate-600">Date: <span className="text-black">{new Date().toLocaleDateString()}</span></div>
-           <div className="text-slate-600">Class: <span className="text-black">{selectedLevel}</span></div>
-           <div className="text-right text-slate-600">Week: <span className="text-black">{selectedWeek}</span></div>
-           <div className="col-span-2 text-slate-600 mt-1">Subject: <span className="text-black">{selectedSubject}</span></div>
+        <div className="grid grid-cols-2 gap-y-3 mb-10 text-[11px] font-bold uppercase pb-4 border-b border-slate-100">
+           <div className="text-slate-600">TEACHER: <span className="text-black">{userProfile.name}</span></div>
+           <div className="text-right text-slate-600">DATE: <span className="text-black">{new Date().toLocaleDateString()}</span></div>
+           <div className="text-slate-600">CLASS: <span className="text-black">{selectedLevel}</span></div>
+           <div className="text-right text-slate-600">WEEK: <span className="text-black">{selectedWeek}</span></div>
+           <div className="col-span-2 text-slate-600 mt-1">SUBJECT: <span className="text-black">{selectedSubject}</span></div>
         </div>
 
-        <div className="mb-8">
-           <h2 className="text-xl font-bold uppercase underline decoration-blue-600 underline-offset-4">Topic: {noteTopic}</h2>
+        <div className="mb-10">
+           <h2 className="text-2xl font-black uppercase underline decoration-black underline-offset-8">TOPIC: {noteTopic}</h2>
         </div>
 
         {noteImage && (
-          <div className="mb-8 rounded-xl overflow-hidden border">
-            <img src={noteImage} className="w-full h-auto object-contain" alt="Board Attachment" />
+          <div className="mb-10 text-center rounded-2xl overflow-hidden shadow-sm border border-slate-100">
+            <img src={noteImage} className="max-w-full h-auto object-contain mx-auto" alt="Board Attachment" />
           </div>
         )}
 
-        <div className="text-lg leading-relaxed whitespace-pre-wrap text-black">
+        <div className="text-xl leading-[1.6] whitespace-pre-wrap text-black font-normal normal-case">
           {currentNote}
         </div>
 
-        <div className="mt-16 pt-6 border-t text-[10px] text-slate-400 font-bold uppercase tracking-widest text-center">
+        <div className="mt-20 pt-8 border-t border-slate-200 text-[10px] text-slate-400 font-bold uppercase tracking-widest text-center">
            IB TECHIFIED Offline Suite • Prepared for the 21st-Century Nigerian Classroom
         </div>
       </div>
@@ -377,21 +379,13 @@ export default function App() {
 
       case 'student_db': return (
         <div className="max-w-4xl mx-auto pt-10 px-4 space-y-10 animate-in slide-in-from-right-10 pb-20 text-center uppercase tracking-widest">
-          <div className="flex items-center justify-between"><button onClick={() => setCurrentModule('hub')} className="flex items-center gap-2 text-slate-500 bg-white dark:bg-slate-900 px-5 py-2.5 rounded-2xl border shadow-sm active:scale-95 text-xs font-bold transition-all leading-none"><ChevronLeft size={18} /> Hub</button><h2 className="text-xl font-black dark:text-slate-100 uppercase tracking-tight">Student Registry</h2></div>
+          <div className="flex items-center justify-between"><button onClick={() => setCurrentModule('hub')} className="flex items-center gap-2 text-slate-500 bg-white dark:bg-slate-900 px-5 py-2.5 rounded-2xl border shadow-sm active:scale-95 text-xs font-bold transition-all leading-none"><ChevronLeft size={18} /> Hub</button><h2 className="text-xl dark:text-slate-100 uppercase tracking-tight leading-none">Student Registry</h2></div>
           <div className="bg-white dark:bg-slate-900 p-8 rounded-[3.5rem] shadow-xl border dark:border-slate-800 space-y-6 text-left font-black">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 leading-none">
                <div className="space-y-1"><label className="text-[9px] text-slate-400 font-bold ml-4 uppercase leading-none">Full Name</label><input id="db_name_in" type="text" placeholder="ADAMU MUSA" className="w-full p-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl outline-none font-bold dark:text-slate-100 shadow-inner" /></div>
                <div className="space-y-1"><label className="text-[9px] text-slate-400 font-bold ml-4 uppercase leading-none">Class (e.g. SS1)</label><input id="db_class_in" type="text" placeholder="SS 1" className="w-full p-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl outline-none font-bold dark:text-slate-100 shadow-inner" /></div>
             </div>
-            <button onClick={() => { 
-                const n = document.getElementById('db_name_in').value; 
-                const c = document.getElementById('db_class_in').value; 
-                if(n && c) {
-                  setGlobalStudents([{ id: Date.now(), name: n.toUpperCase(), className: c.toUpperCase() }, ...globalStudents]);
-                  document.getElementById('db_name_in').value = ""; document.getElementById('db_class_in').value = "";
-                  triggerToast("Added to Registry");
-                }
-              }} className="w-full bg-orange-600 text-white p-5 rounded-2xl font-black shadow-xl uppercase tracking-widest text-[10px] active:scale-95 transition-all leading-none">Add to Registry</button>
+            <button onClick={() => { const n = document.getElementById('db_name_in').value; const c = document.getElementById('db_class_in').value; if(n && c) { setGlobalStudents([{ id: Date.now(), name: n.toUpperCase(), className: c.toUpperCase() }, ...globalStudents]); document.getElementById('db_name_in').value = ""; document.getElementById('db_class_in').value = ""; triggerToast("Added to Registry"); } }} className="w-full bg-orange-600 text-white p-5 rounded-2xl font-black shadow-xl uppercase tracking-widest text-[10px] active:scale-95 transition-all leading-none">Add to Registry</button>
           </div>
           <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-sm border overflow-hidden text-left font-black leading-none">
             <div className="p-4 border-b bg-slate-50 dark:bg-slate-800"><input type="text" placeholder="Search Database..." className="w-full bg-white dark:bg-slate-900 p-3 rounded-xl border-none outline-none font-bold shadow-inner" value={dbSearch} onChange={e => setDbSearch(e.target.value)} /></div>
@@ -408,7 +402,7 @@ export default function App() {
           { t: 'Voice Call', d: '+234 703 038 554', i: <Phone className="text-blue-600"/>, l: 'tel:+234703038554' },
           { t: 'WhatsApp Chat', d: '+234 703 038 554', i: <MessageCircle className="text-green-500"/>, l: 'https://wa.me/234703038554' },
           { t: 'Official Email', d: 'ib.techified.consults.africa@gmail.com', i: <Mail className="text-orange-500"/>, l: 'mailto:ib.techified.consults.africa@gmail.com' },
-          { t: 'SMS Help', d: '+234 703 038 554', i: <MessageSquare className="text-purple-600"/>, l: 'sms:+234703038554' }
+          { t: 'SMS Support', d: '+234 703 038 554', i: <MessageSquare className="text-purple-600"/>, l: 'sms:+234703038554' }
         ];
         return (
           <div className="max-w-4xl mx-auto pt-10 px-4 space-y-10 animate-in fade-in pb-20 text-center uppercase tracking-widest font-black leading-none">
@@ -464,7 +458,7 @@ export default function App() {
             <div className="grid grid-cols-1 gap-6 text-left leading-none font-black">
               <div className="bg-blue-600 p-10 rounded-[3.5rem] text-white shadow-xl flex items-center gap-8"><Lightbulb size={60} /><div><h3 className="text-3xl font-black uppercase leading-tight leading-none">User Manual</h3><p className="text-blue-100 uppercase font-bold tracking-widest text-xs mt-3 opacity-80 leading-relaxed leading-none">Master your digital toolkit with IB TECHIFIED.</p></div></div>
               {[{t: "EduCalc Automation", d: "Set Subject and Class. Students from your Registry auto-populate based on normalized names ('ss1' = 'ss 1'). Results sum automatically using standard grading logic. Archives track mod time."}, {t: "EduNote Workspace", d: "Prepare notes with full Curriculum support. Attach board photos using the Camera icon. Export as professional PDF or Word Doc. Entries display exact modification timestamps."}, {t: "Registry & Backup", d: "Add names to Registry once. Normalization logic ensures consistency across all classes. Use Backup Center weekly to download master JSON file for data portability across devices."}].map(g => (
-                <div key={g.t} className="bg-white dark:bg-slate-900 p-8 rounded-[3rem] border border-slate-100 dark:border-slate-800 shadow-sm space-y-4 transition-all hover:border-blue-400"><h3 className="text-xl font-black text-slate-800 dark:text-slate-100 border-b dark:border-slate-800 pb-4 uppercase leading-none leading-none">{g.t}</h3><p className="text-sm font-bold text-slate-600 dark:text-slate-400 leading-relaxed">• {g.d}</p></div>
+                <div key={g.t} className="bg-white dark:bg-slate-900 p-8 rounded-[3rem] border border-slate-100 dark:border-slate-800 shadow-sm space-y-4 transition-all hover:border-blue-400 leading-none"><h3 className="text-xl font-black text-slate-800 dark:text-slate-100 border-b dark:border-slate-800 pb-4 uppercase leading-none leading-none">{g.t}</h3><p className="text-sm font-bold text-slate-600 dark:text-slate-400 leading-relaxed">• {g.d}</p></div>
               ))}
             </div>
           </div>
@@ -477,17 +471,17 @@ export default function App() {
              <div className="lg:col-span-2 bg-white dark:bg-slate-900 p-8 rounded-[3.5rem] shadow-xl border dark:border-slate-800 space-y-6">
                 <h3 className="text-sm dark:text-slate-100 uppercase tracking-widest leading-none"><FilePlus2 size={18} className="text-blue-600 inline mr-2" /> Class Entry</h3>
                 <div className="space-y-4 pt-4">
-                  <div className="space-y-1"><label className="text-[9px] text-slate-400 font-bold ml-4 uppercase">Subject</label><input type="text" placeholder="Mathematics" className="w-full p-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl outline-none font-bold dark:text-slate-100 shadow-inner" value={subject} onChange={(e) => setSubject(e.target.value)} /></div>
+                  <div className="space-y-1"><label className="text-[9px] text-slate-400 font-bold ml-4 uppercase tracking-widest leading-none">Subject</label><input type="text" placeholder="Mathematics" className="w-full p-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl outline-none font-bold dark:text-slate-100 shadow-inner" value={subject} onChange={(e) => setSubject(e.target.value)} /></div>
                   <div className="space-y-1">
-                    <label className="text-[9px] text-slate-400 font-bold ml-4 uppercase">Class</label>
+                    <label className="text-[9px] text-slate-400 font-bold ml-4 uppercase tracking-widest leading-none">Class</label>
                     <input type="text" placeholder="e.g. SS 1" className="w-full p-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl outline-none font-bold dark:text-slate-100 shadow-inner" value={className} onChange={(e) => setClassName(e.target.value)} />
-                    {className.length > 0 && <div className="mt-2 text-[9px] font-black text-blue-600 px-4 flex items-center gap-1 leading-none"><Zap size={10} /> {detectCategory(className).toUpperCase()} DETECTED</div>}
+                    {className.length > 0 && <div className="mt-2 text-[9px] font-black text-blue-600 px-4 flex items-center gap-1 leading-none"><Zap size={10} /> {detectCategory(className).toUpperCase()} SCHEME DETECTED</div>}
                   </div>
                   <button onClick={handleStartEduCalc} className="w-full bg-blue-600 text-white p-5 rounded-2xl font-black shadow-xl uppercase tracking-widest text-[10px] active:scale-95 transition-all leading-none">Open Register</button>
                 </div>
              </div>
              <div className="lg:col-span-3 space-y-6">
-                <h3 className="text-sm dark:text-slate-100 uppercase tracking-widest px-4 leading-none"><History size={18} className="text-blue-600 inline mr-2" /> Archives</h3>
+                <h3 className="text-sm dark:text-slate-100 uppercase tracking-widest px-4 leading-none"><History size={18} className="text-blue-600 inline mr-2" /> Local Archives</h3>
                 <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
                     {registers.length === 0 ? <div className="text-center py-20 bg-white dark:bg-slate-900 rounded-[3rem] border border-dashed text-slate-300 font-black text-[9px] uppercase tracking-widest leading-none shadow-inner">No local records</div> :
                     registers.map(r => (
@@ -575,7 +569,7 @@ export default function App() {
           <div className="sticky top-4 z-50 flex items-center justify-between bg-white/90 dark:bg-slate-900/90 backdrop-blur-md p-4 rounded-[2rem] border shadow-xl">
              <button onClick={() => setCurrentModule('edunote_levels')} className="flex items-center gap-2 text-slate-500 bg-slate-50 dark:bg-slate-800 px-5 py-2.5 rounded-2xl active:scale-95 text-xs font-bold transition-all leading-none"><ChevronLeft size={18} /> Back</button>
              <div className="flex gap-2">
-                <button onClick={() => { setIsPrinting(true); setTimeout(() => { window.print(); setIsPrinting(false); }, 1000); }} className="bg-blue-600 text-white px-5 py-2.5 rounded-2xl text-[9px] font-black uppercase shadow-lg active:scale-95 transition-all leading-none"><Printer size={16} className="inline mr-2"/> PDF</button>
+                <button onClick={() => { setIsPrinting(true); setTimeout(() => { window.print(); setIsPrinting(false); }, 1200); }} className="bg-blue-600 text-white px-5 py-2.5 rounded-2xl text-[9px] font-black uppercase shadow-lg active:scale-95 transition-all leading-none"><Printer size={16} className="inline mr-2"/> PDF</button>
                 <button onClick={exportDoc} className="bg-indigo-600 text-white px-5 py-2.5 rounded-2xl text-[9px] font-black uppercase shadow-lg active:scale-95 transition-all leading-none"><FileCode size={16} className="inline mr-2"/> Word Doc</button>
                 <button onClick={saveLessonNote} className="bg-emerald-600 text-white px-5 py-2.5 rounded-2xl text-[9px] font-black uppercase shadow-lg active:scale-95 transition-all leading-none"><Save size={16} className="inline mr-2"/> Save</button>
              </div>
@@ -654,7 +648,7 @@ export default function App() {
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 font-sans pb-24 selection:bg-blue-100 text-slate-800 transition-colors duration-300">
       {renderView()}
       <div className="fixed bottom-6 left-0 right-0 pointer-events-none text-center print:hidden z-0 font-black">
-         <p className="text-[9px] font-black text-slate-300 dark:text-slate-700 uppercase tracking-[0.3em] italic leading-none font-black">IB TECHIFIED • KANO NIGERIA • 2026</p>
+         <p className="text-[9px] font-black text-slate-300 dark:text-slate-700 uppercase tracking-[0.3em] italic leading-none font-black">IBRAHIM I.I. YAMTA • 3MTT • FE/23/86231210 • KANO NIGERIA • 2026</p>
       </div>
       {showToast && !isPrinting && (
         <div className="fixed bottom-10 left-1/2 -translate-x-1/2 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 px-8 py-5 rounded-[2.5rem] shadow-2xl flex items-center gap-4 animate-in fade-in slide-in-from-bottom-5 duration-300 z-[9999] border dark:border-slate-800 font-black uppercase text-[10px] tracking-widest leading-none font-black">
