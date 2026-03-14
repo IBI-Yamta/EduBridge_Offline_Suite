@@ -1,6 +1,6 @@
 EduBridge Offline Suite
 
-Begin here [https://edubridgesuites.bolt.host](https://edubridgesuites.bolt.host)
+
 Empowering Nigerian Educators through high-performance digital infrastructure. EduBridge Offline Suite is a centralized, offline-first workspace designed to automate grading, structure lesson planning, and provide essential digital literacy training for teachers.
 
 Developed by Ibrahim Isah Yamta. 3MTT Fellow. FE/23/86231210 (Kano, Nigeria).
