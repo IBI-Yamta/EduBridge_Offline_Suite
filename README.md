@@ -1,4 +1,5 @@
 EduBridge Offline Suite
+
 | Main Dashboard Light Mode | Main Dashboard Dark Mode |
 | ![Dashboard Light Mode](dashboard_light_mode.png) | ![Dashboard Dark Mode](dashboard_dark_mode.png) |
 <p align="center">
