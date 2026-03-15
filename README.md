@@ -1,6 +1,5 @@
 EduBridge Offline Suite
 
-
 <p align="center">
     <img src="dashboard_light_mode.png" width="45%"/>
     <img src="dashboard_dark_mode.png" width="45%"/>
