@@ -1,5 +1,10 @@
 EduBridge Offline Suite
-
+| Main Dashboard Light Mode | Main Dashboard Dark Mode |
+| ![Dashboard Light Mode](dashboard_light_mode.jpg) | ![Dashboard Dark Mode](dashboard_dark_mode.jpg) |
+<p align="center">
+    <img src="dashboard_light_mode.jpg" width="45%"/>
+    <img src="dashboard_dark_mode.jpg" width="45%"/>
+</p>
 
 Empowering Nigerian Educators through high-performance digital infrastructure. EduBridge Offline Suite is a centralized, offline-first workspace designed to automate grading, structure lesson planning, and provide essential digital literacy training for teachers.
 
